@@ -3,45 +3,46 @@
 ## Meus requisitos levantados para o projeto:
 
 ### Usuário não autenticado
-### * - Registro de usuario - create | nao autenticado
-### * - Login com autenticação - create | nao autenticado
+ * Registro de usuario - create | nao autenticado
+ * Login com autenticação - create | nao autenticado
 
 ### Usuário autenticado
-### * - Logout
-### * - Atualização de dados do usuario (Extra/Opcional) - update
-### * - listar pratos por categoria - index
-### * - mostrar prato - show
-### * - pode buscar pratos por ingredientes ou pelo nome - index
-### * - pode favoritar itens listados
-### * - listar produtos favoritos - index favorite pode navegar até os produto
+ * Logout
+ * Atualização de dados do usuario (Extra/Opcional) - update
+ * listar pratos por categoria - index
+ * mostrar prato - show
+ * pode buscar pratos por ingredientes ou pelo nome - index
+ * pode favoritar itens listados
+ * listar produtos favoritos - index favorite pode navegar até os produto
 
 ### Usuário comum
 
-### * - poder adicionar e remover quantidade de pratos para incluir no pedido
-### * - realizar inclusão da quantidade de itens pedidos - create item_product
-### * - itens do pedido são armazenados em local storage durante navegação (Extra/opcional)
-### * - inclusão de itens pedidos numa entidade carrinho após logout (Extra/opcional) - create item_product
-### * - mostrar meu pedido com valor total, itens-produto com quantidade e valor final - (um tipo de show usando o localStorage por exemplo, o cart deve ser recarregado no localstorage, o cart só serve para o logout - ele é criado - create cart ou atualizado - update? cart, e para a finalização da compra - delete? cart)
-### * - é possível excluir cada item pedido nessa tela - delete item_product
-### * - nessa tela mostra as formas de pagamento e status do pedido - se pagamento aprovado - create o pedido é criado - create, o cart e localStorage devem ser deletados - delete? cart
-### * - no final do procedimento mostra que o pedido foi entregue, tela deve ser redirecionada a outro local.
-### * - listar histórico de pedidos - index pedidos e show pedido podendo rever tela de pedido - vendo mais detalhes e status do pedido
+ * poder adicionar e remover quantidade de pratos para incluir no pedido
+ * realizar inclusão da quantidade de itens pedidos - create item_product
+ * itens do pedido são armazenados em local storage durante navegação (Extra/opcional)
+ * inclusão de itens pedidos numa entidade carrinho após logout (Extra/opcional) - create item_product
+ * mostrar meu pedido com valor total, itens-produto com quantidade e valor final - (um tipo de show usando o localStorage por exemplo, o cart deve ser recarregado no localstorage, o cart só serve para o logout - ele é criado - create cart ou atualizado - update? cart, e para a finalização da compra - delete? cart)
+ * é possível excluir cada item pedido nessa tela - delete item_product
+ * nessa tela mostra as formas de pagamento e status do pedido - se pagamento aprovado - create o pedido é criado - create, o cart e localStorage devem ser deletados - delete? cart
+ * no final do procedimento mostra que o pedido foi entregue, tela deve ser redirecionada a outro local.
+ * listar histórico de pedidos - index pedidos e show pedido podendo rever tela de pedido - vendo mais detalhes e status do pedido
 
 ### Admin
-### * - pode criar pratos para o restaurante - create prato
-### * - ao ver um prato pode editá-lo ao invez de incluir em carrinho - update prato
-### * - em vez de historico de pedidos pode ver pedidos - index de pedido
-### * - para cada produto pode ver detalhes e atualizar o status do pedido existente - index e update de pedido
-### * - o admin não pode favoritar mais e em vez de ver meus favoritos o admin pode ver os produtos mais favoritados "Favoritos" mostrando o nome de usuario e seu avatar (Minhas modificações - opcional) - index favoritos
+ * pode criar pratos para o restaurante - create prato
+ * ao ver um prato pode editá-lo ao invez de incluir em carrinho - update prato
+ * em vez de historico de pedidos pode ver pedidos - index de pedido
+ * para cada produto pode ver detalhes e atualizar o status do pedido existente - index e update de pedido
+ * o admin não pode favoritar mais e em vez de ver meus favoritos o admin pode ver os produtos mais favoritados "Favoritos" mostrando o nome de usuario e seu avatar (Minhas modificações - opcional) - index favoritos
 
 
 #### Modelo ER
 ![modelo er](./ER.png)
 
-### Modificação escolhida por mim -
-### em vez de usar sqlite no windows e pegando o DB como um aquivo database.db, 
-### escolhi usar o DB postgres em um container dpcker
-### também escolhi usar de Typescript + jest para boas práticas
+# Front e Back Food Explorer"
+### Modificações escolhidas por mim -
+### em vez de usar sqlite pegando o DB pelo aquivo database.db, 
+### escolhi usar o DB postgres em um container Docker,
+### também escolhi usar typescript + jest
 
 #### FIGMA: https://www.figma.com/file/vAq7WgKTPmFqzZ5YIROS9i/food-explorer-v2-(Community)?node-id=201%3A1532&mode=dev
 #### modelo ER feito no DRAWSQL: https://drawsql.app/
