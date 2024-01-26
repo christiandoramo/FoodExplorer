@@ -1,8 +1,8 @@
 # Front e Back Food Explorer"
-### Modificação escolhida por mim -
-### em vez de usar sqlite no windows e pegando o DB como um aquivo database.db, 
-### escolhi usar o DB postgres em um container dpcker
-### também escolhi usar de Typescript + jest para boas práticas
+### Modificações escolhidas por mim -
+### em vez de usar sqlite pegando o DB pelo aquivo database.db, 
+### escolhi usar o DB postgres em um container Docker,
+### também escolhi usar typescript + jest
 
 #### FIGMA: https://www.figma.com/file/vAq7WgKTPmFqzZ5YIROS9i/food-explorer-v2-(Community)?node-id=201%3A1532&mode=dev
 #### modelo ER feito no DRAWSQL: https://drawsql.app/
