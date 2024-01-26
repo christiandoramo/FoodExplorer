@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { UsersCreateService } from '../services/UsersCreateService'
 import { UsersRepository } from '../repositories/UsersRepository'
+import { UsersShowService } from '../services/UsersShowService'
 
 export class UsersController {
     async create(request: Request, response: Response) {
@@ -9,5 +10,12 @@ export class UsersController {
         const usersCreateService = new UsersCreateService(usersRepository);
         const newUser = await usersCreateService.execute({ name, email, password })
         return response.status(201).json(newUser)
+    }
+    async show(request: Request, response: Response)  {
+        const { id } = request.params
+        const usersRepository = new UsersRepository()
+        const usersShowService = new UsersShowService(usersRepository);
+        const foundUser = await usersShowService.execute(id)
+        return response.status(200).json(foundUser)
     }
 }

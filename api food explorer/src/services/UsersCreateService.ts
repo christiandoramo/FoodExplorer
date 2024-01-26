@@ -13,6 +13,8 @@ export class UsersCreateService {
         if (user) throw new AppError("Unavailable email", 400)
         const hashedPassword: string = await hash(password, 8)
         const userId = await this.usersRepository.create({ name, email, password: hashedPassword })
-        return await this.usersRepository.findById(userId);
+        const newUser = await this.usersRepository.findById(userId);
+        delete newUser.password
+        return newUser
     }
 }

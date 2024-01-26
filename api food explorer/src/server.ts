@@ -5,9 +5,13 @@ const express = require('express')
 import { NextFunction, Request, Response } from "express"
 import AppError from "./utils/AppError"
 import { routes } from "./routes"
+const cookieParser = require("cookie-parser")
 
 const app = express()
-app.use(cors())
+app.use(cookieParser())
+app.use(cors({
+    credentials: true
+}))
 app.use(express.json())
 app.use(routes)
 
