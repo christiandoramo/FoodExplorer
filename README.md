@@ -109,3 +109,6 @@ npx knex migrate:up - veja montar as migrates - agora atualizadas
 npx knex migrate:latest - pode atualizar os desmontados
 
 inicialmente rodar o banco de dados Postgres com o container docker e instalar npm pg 
+criando o app next:
+npm install -g create-next-app
+npx create-next-app nome-do-seu-projeto
