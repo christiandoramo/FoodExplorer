@@ -19,7 +19,8 @@ export class SessionsRefreshService {
         try{
             const oldRefreshToken = await this.usersRepository.findRefreshToken(user_id)
             if(refresh_token === oldRefreshToken){// compara refresh token no cookie com o no Banco para o id desse usuario
-                const decoded = verify(oldRefreshToken, authConfig.jwt.refreshSecret) as { [key: string]: any };
+                const decoded = verify(oldRefreshToken, authConfig.jwt.refreshSecret) as { [key: string]: any }; // verifica se token e valido ainda
+                if(decoded.id!==user_id) throw new AppError("0Invalid or Expired credentials",401) // usuario informou id falso ou errado
                 const { secret, expiresIn, refreshExpiresIn, refreshSecret } = authConfig.jwt;
                 const newAccess_token = sign({ id: String(user.id), role: user.role }, secret, { expiresIn });
                 const newRefresh_token = sign({ id: String(user.id), role: user.role }, refreshSecret, { expiresIn: refreshExpiresIn })
