@@ -10,6 +10,7 @@ exports.up = function (knex) {
         table.text("password").notNullable()
         table.text("avatar")
         table.enum("role", ['customer', 'admin', 'other']).defaultTo('customer').notNullable()
+        table.text("refresh_token")
         table.timestamp('created_at').defaultTo(knex.raw('CURRENT_TIMESTAMP(0)'))
         table.timestamp('updated_at').defaultTo(knex.raw('CURRENT_TIMESTAMP(0)'))
     })
