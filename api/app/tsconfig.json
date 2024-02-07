@@ -100,5 +100,6 @@
   },
   "exclude": [
     "docker-compose.yml",
+    "knexfile.js"
   ]
 }
