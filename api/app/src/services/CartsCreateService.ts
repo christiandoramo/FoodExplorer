@@ -5,13 +5,17 @@ interface IngredientData {
     name: string;
 }
 
-export class ProductsCreateService {
+export class CartsCreateService {
     cartsRepository
     constructor(cartsRepository: CartsRepository) {
         this.cartsRepository = cartsRepository
     }
-    async execute(user_id: string) {
-        const newCartId = await this.cartsRepository.create(user_id);
+    async execute(userId: string) {
+        const usedCart = await this.cartsRepository.findCartByUserId(userId);
+        if(usedCart) {
+            throw new AppError("You already have a cart", 400)
+        }
+        const newCartId = await this.cartsRepository.create(userId);
         const newCart = await this.cartsRepository.findCartById(newCartId);
         return newCart
     }
