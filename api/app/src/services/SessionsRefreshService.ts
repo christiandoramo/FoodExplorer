@@ -3,7 +3,6 @@ import AppError from "../utils/AppError"
 import { sign, verify } from 'jsonwebtoken';
 import authConfig from "../configs/auth";
 import { UsersSearchService } from "./UsersSearchService";
-import { compare } from "bcryptjs"
 
 export class SessionsRefreshService {
     usersRepository

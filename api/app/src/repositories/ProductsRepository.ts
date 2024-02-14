@@ -1,7 +1,6 @@
 import { db } from './../database'
 import crypto from 'crypto'
 
-// REFAZER MODELAGEM ER - ADICIONAR TABELA DE INGREDIENTES
 interface ProductData {
     id?: string;
     name: string;
@@ -82,19 +81,21 @@ export class ProductsRepository {
     async findAllProducts() {
         const products = await db('products');
         const productsWithIngredients = products.map(async (product) => {
-            const ingredients = await db('ingredients').where({ product_id: Number(product.id) })
+            const ingredients = await db('ingredients').where({ product_id: product.id })
             return { ...product, ingredients }
         })
         return productsWithIngredients
     }
 
     async findById(id: string) {
-        const product = await db('products').where({ id: Number(id) }).first()
-        const ingredients = await db('ingredients').where({ product_id: Number(id) })
+        const product = await db('products').where({ id }).first()
+        const ingredients = await db('ingredients').where({ product_id: id })
         return { ...product, ingredients }
     }
 
     async deleteProduct(id: string) {
-        return await db('products').where({ id: Number(id) }).delete();
+        await db('item_products').where({ product_id: id }).delete();
+        await db('ingredients').where({ product_id: id }).delete();
+        return await db('products').where({ id }).delete();
     }
 }

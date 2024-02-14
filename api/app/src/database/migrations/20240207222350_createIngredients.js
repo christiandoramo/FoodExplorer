@@ -4,9 +4,9 @@
  */
 exports.up = function(knex) {
     return knex.schema.createTable("ingredients", (table) => {
-        table.increments("id")
+        table.uuid("id", { primaryKey: true });
         table.text("name").notNullable()
-        table.integer("product_id").references('id').inTable('products').onDelete('CASCADE').notNullable
+        table.uuid("product_id").references('id').inTable('products').onDelete('CASCADE').notNullable
     })
 };
 

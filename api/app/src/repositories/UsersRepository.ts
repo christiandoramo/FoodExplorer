@@ -4,6 +4,7 @@ import crypto from 'crypto'
 export class UsersRepository {
     async create({ email, name, password }: { email: string, name: string, password: string }) {
         const [result] = await db('users').insert({ email, name, password }).returning('id')
+        await db('carts').insert({ user_id: result.id }) // usuario inicia ja com um carrinho vazio
         return result.id
     }
     async findByEmail(email: string) {
@@ -11,7 +12,7 @@ export class UsersRepository {
     }
 
     async findById(id: string) {
-        return await db('users').where({ id: Number(id) }).first()
+        return await db('users').where({ id }).first()
     }
     async saveRefreshToken(userId: number, refresh_token: string) {
         // Criptografe o refresh token antes de salvá-lo
@@ -22,7 +23,7 @@ export class UsersRepository {
     }
 
     async findRefreshToken(userId: string) {
-        const user = await db('users').where({ id: Number(userId) }).first()
+        const user = await db('users').where({ id: userId }).first()
         // Descriptografe o refresh token antes de retorná-lo
         const decipher = crypto.createDecipher('aes-256-cbc', process.env.REFRESH_SECRET || 'a password');
         let decrypted = decipher.update(user.refresh_token, 'hex', 'utf8');

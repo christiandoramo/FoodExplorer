@@ -1,10 +1,6 @@
 import { CartsRepository } from "../repositories/CartsRepository"
 import AppError from "../utils/AppError"
 
-interface IngredientData {
-    name: string;
-}
-
 export class CartsCreateService {
     cartsRepository
     constructor(cartsRepository: CartsRepository) {

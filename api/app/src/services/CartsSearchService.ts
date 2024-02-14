@@ -3,10 +3,6 @@ import AppError from "../utils/AppError"
 import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsSearchService } from "./ProductsSearchService";
 
-interface IngredientData {
-    name: string;
-}
-
 export class CartsSearchService {
     cartsRepository
     constructor(cartsRepository: CartsRepository) {

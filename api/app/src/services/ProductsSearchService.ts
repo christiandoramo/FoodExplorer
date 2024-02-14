@@ -1,10 +1,6 @@
 import { ProductsRepository } from "../repositories/ProductsRepository"
 import AppError from "../utils/AppError"
 
-interface IngredientData {
-    name: string;
-}
-
 interface ProductSearchData {
     id?: string;
     input?: string;

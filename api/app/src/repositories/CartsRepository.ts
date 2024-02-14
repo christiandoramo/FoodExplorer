@@ -5,7 +5,7 @@ interface IngredientData {
 }
 export class CartsRepository {
     async create(userId: string) {
-        const [result] = await db('carts').insert({ user_id: Number(userId) }).returning('id')
+        const [result] = await db('carts').insert({ user_id: userId }).returning('id')
         return result.id
     }
 
@@ -23,15 +23,22 @@ export class CartsRepository {
         return cartWithItems
     }
 
-    async updateCart(newAmount: number, cartId: string) {
-        return await db('carts').update({ amount: newAmount }).where({ id: Number(cartId) })
-        // quem será atualizado realmente serão os itens que apontam para o cart que vão deixar de existir
-
-    }
     async deleteCartById(id: string) {
-        return await db('carts').where({ id: Number(id) }).delete();
+        await db('items_products').where({ cart_id: id}).delete();
+        await db('carts').where({ id}).delete();
+        return 
     }
     async deleteCartByUserId(userId: string) {
-        return await db('carts').where({ user_id: Number(userId) }).delete();
+        const carts = await db('carts').where({ user_id: userId });
+        const lastIndex = carts.length - 1
+        await db('items_products').where({ cart_id: carts[lastIndex].id }).delete();
+        await db('carts').where({ id:carts[lastIndex].id}).delete();
+        return
+    }
+    async deleteItemsFromCartByUserId(userId: string) {
+        const carts = await db('carts').where({ user_id: userId });
+        const lastIndex = carts.length - 1
+        await db('items_products').where({ cart_id: carts[lastIndex].id }).delete();
+        return
     }
 }
