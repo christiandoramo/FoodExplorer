@@ -17,7 +17,7 @@ exports.up = function (knex) {
       .inTable("carts")
       .onDelete("CASCADE")
       .notNullable();
-    table.double("amount").defaultTo(0);
+    table.decimal("amount").defaultTo(0);
     table.integer("quantity").notNullable();
     table.timestamp("add_date").defaultTo(knex.raw("CURRENT_TIMESTAMP(0)"));
   });

@@ -23,7 +23,7 @@ exports.up = function (knex) {
       .inTable("carts")
       .onDelete("CASCADE")
       .notNullable();
-    table.double("amount").defaultTo(0);
+    table.decimal("amount").defaultTo(0);
     table.timestamp("created_at").defaultTo(knex.raw("CURRENT_TIMESTAMP(0)"));
     table
       .enum("status", ["Pedente", "Preparando", "Entregue"])
