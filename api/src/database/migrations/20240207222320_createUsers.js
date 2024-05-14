@@ -2,9 +2,9 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function (knex) {
-  return knex.schema.createTable("users", (table) => {
-    table.uuid("id", { primaryKey: true });
+exports.up = async function (knex) {
+  return await knex.schema.createTable("users", (table) => {
+    table.uuid("id", { primaryKey: true }).defaultTo(knex.fn.uuid());
     table.text("name").notNullable();
     table.text("email").notNullable();
     table.text("password").notNullable();

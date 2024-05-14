@@ -3,23 +3,25 @@
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-require('dotenv/config')
-const path = require('path');
-module.exports = {
+require("dotenv/config");
+
+import path from "path";
+
+export const config = {
   development: {
-    client: 'pg',
+    client: "pg",
     connection: {
-      host: 'localhost',
+      host: "localhost",
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      port: 5432
+      port: 5432,
     },
     seeds: {
-      directory: path.resolve(__dirname,"src", "database", "seeds")
+      directory: "./seeds",
     },
     migrations: {
-      directory: path.resolve(__dirname, "src", "database", "migrations")
+      directory: "./migrations",
     },
     useNullAsDefault: true,
   },

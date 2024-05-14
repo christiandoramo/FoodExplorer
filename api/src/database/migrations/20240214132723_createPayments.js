@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("payments", (table) => {
-    table.uuid("id", { primaryKey: true });
+    table.uuid("id", { primaryKey: true }).defaultTo(knex.fn.uuid());
     table.enum("method", ["Cartâo de Crédito", "Pix"]);
     table.decimal("amount").notNullable();
     table.uuid("cart_id").references("id").inTable("carts").notNullable();

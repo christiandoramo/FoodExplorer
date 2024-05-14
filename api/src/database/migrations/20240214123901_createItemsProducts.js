@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("items_products", (table) => {
-    table.uuid("id", { primaryKey: true });
+    table.uuid("id", { primaryKey: true }).defaultTo(knex.fn.uuid());
     table
       .uuid("product_id")
       .references("id")

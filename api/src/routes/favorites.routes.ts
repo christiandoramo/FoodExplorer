@@ -1,11 +1,9 @@
-import { Router } from 'express'
-import { FavoritesController } from '../controllers/FavoritesController'
-import { UsersSessionValidatedController } from '../controllers/UsersSessionValidatedController'
-import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
+import { Router } from "express";
+import { FavoritesController } from "../controllers/FavoritesController";
 
-const favoritesRoutes = Router()
-const favoritesController = new FavoritesController()
-favoritesRoutes.post("/", ensureAuthenticated, favoritesController.create)
-favoritesRoutes.get("/", ensureAuthenticated, favoritesController.index)
-favoritesRoutes.delete("/", ensureAuthenticated, favoritesController.delete)
-export { favoritesRoutes }
+const favoritesRoutes = Router();
+const favoritesController = new FavoritesController();
+favoritesRoutes.post("/", favoritesController.create);
+favoritesRoutes.get("/", favoritesController.index);
+favoritesRoutes.delete("/", favoritesController.delete);
+export { favoritesRoutes };

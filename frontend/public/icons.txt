@@ -1,0 +1,12 @@
+menu <List size={32} />
+fechar <X size={32} />
+receita <Receipt size={32} />
+cartão de crédito <CreditCard size={32} />
+setinha para esquerda <CaretLeft size={32} />
+setinha para direita <CaretRight size={32} />
+PIX <PixLogo size={32} />
+mais <Plus size={32} />
+menos <Minus size={32} />
+garfo e faca <ForkKnife size={32} />
+coração <HeartStraight size={32} />
+lápis <PencilSimple size={32} />

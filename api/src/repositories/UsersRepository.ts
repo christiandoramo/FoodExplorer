@@ -13,7 +13,7 @@ export class UsersRepository {
   }) {
     const [result] = await db("users")
       .insert({ email, name, password })
-      .returning("id");
+      .returning(["id"]);
     await db("carts").insert({ user_id: result.id }); // usuario inicia ja com um carrinho vazio
     return result.id;
   }
@@ -24,28 +24,14 @@ export class UsersRepository {
   async findById(id: string) {
     return await db("users").where({ id }).first();
   }
-  async saveRefreshToken(userId: number, refresh_token: string) {
-    // Criptografe o refresh token antes de salvá-lo
-    const cipher = crypto.createCipher(
-      "aes-256-cbc",
-      process.env.REFRESH_SECRET || "a password"
-    );
-    let encrypted = cipher.update(refresh_token, "utf8", "hex");
-    encrypted += cipher.final("hex");
+  async saveRefreshToken(userId: string, refresh_token: string) {
     await db("users")
       .where({ id: userId })
-      .update({ refresh_token: encrypted });
+      .update({ refresh_token: refresh_token });
   }
 
   async findRefreshToken(userId: string) {
     const user = await db("users").where({ id: userId }).first();
-    // Descriptografe o refresh token antes de retorná-lo
-    const decipher = crypto.createDecipher(
-      "aes-256-cbc",
-      process.env.REFRESH_SECRET || "a password"
-    );
-    let decrypted = decipher.update(user.refresh_token, "hex", "utf8");
-    decrypted += decipher.final("utf8");
-    return decrypted;
+    return user.refresh_token;
   }
 }
