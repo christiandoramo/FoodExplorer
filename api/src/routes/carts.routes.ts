@@ -1,11 +1,9 @@
-import { Router } from 'express'
-import { CartsController } from '../controllers/CartsController'
-import { UsersSessionValidatedController } from '../controllers/UsersSessionValidatedController'
-import { ensureAuthenticated } from '../middlewares/ensureAuthenticated'
+import { Router } from "express";
+import { CartsController } from "../controllers/CartsController";
 
-const cartsRoutes = Router()
-const cartsController = new CartsController()
-cartsRoutes.post("/", ensureAuthenticated, cartsController.create)
-cartsRoutes.get("/", ensureAuthenticated, cartsController.show)
-cartsRoutes.delete("/", ensureAuthenticated, cartsController.delete)
-export { cartsRoutes }
+const cartsRoutes = Router();
+const cartsController = new CartsController();
+cartsRoutes.post("/", cartsController.create);
+cartsRoutes.get("/", cartsController.show);
+cartsRoutes.delete("/", cartsController.delete);
+export { cartsRoutes };
