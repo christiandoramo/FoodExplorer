@@ -16,7 +16,8 @@ export async function ensureAuthenticated(
   next: NextFunction
 ) {
   try {
-    const authHeader = request.headers.authorization;
+    const authHeader = request?.headers?.authorization;
+
     if (!authHeader) throw new AppError("Não autenticado", 401);
     // primeira posição é irrelevante
     const [, session_token] = authHeader.split(" "); //auth do tipo BEARER = "BEARER XXXTOKENXX"
@@ -28,6 +29,7 @@ export async function ensureAuthenticated(
       id: id,
       role: role,
     };
+
     return next();
   } catch (error) {
     return response.redirect("refresh-session");

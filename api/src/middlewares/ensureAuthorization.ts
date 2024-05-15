@@ -22,7 +22,6 @@ export async function ensureAuthorization(
       return response.status(403).json("Não autorizado");
     return next();
   } catch (error: any) {
-    console.log(error);
     throw error;
   }
 }

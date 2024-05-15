@@ -34,4 +34,10 @@ export class UsersRepository {
     const user = await db("users").where({ id: userId }).first();
     return user.refresh_token;
   }
+
+  async deleteRefreshToken(userId: string) {
+    return await db("users")
+      .where({ id: userId })
+      .update({ refresh_token: null });
+  }
 }
