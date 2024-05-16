@@ -3,6 +3,13 @@ import { UsersCreateService } from "../services/UsersCreateService";
 import { UsersRepository } from "../repositories/UsersRepository";
 import { UsersSearchService } from "../services/UsersSearchService";
 
+interface ExtendedRequest extends Request {
+  user?: {
+    role: string;
+    id: string;
+  };
+}
+
 export class UsersController {
   async create(request: Request, response: Response) {
     const { name, email, password } = request.body;
@@ -11,11 +18,12 @@ export class UsersController {
     const newUser = await usersCreateService.execute({ name, email, password });
     return response.status(201).json(newUser);
   }
-  async show(request: Request, response: Response) {
+  async show(request: ExtendedRequest, response: Response) {
     const { id } = request.params;
+    const { role } = request.body;
     const usersRepository = new UsersRepository();
     const usersSearchService = new UsersSearchService(usersRepository);
-    const foundUser = await usersSearchService.execute(id);
+    const foundUser = await usersSearchService.execute(id, role);
     return response.status(200).json(foundUser);
   }
 }

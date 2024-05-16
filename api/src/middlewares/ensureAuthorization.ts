@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { USER_ROLES } from "../utils/Enums";
+import { USER_ROLES } from "../enums/users";
 
 interface ExtendedRequest extends Request {
   user?: {

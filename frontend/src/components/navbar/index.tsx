@@ -1,16 +1,12 @@
 import React, { useState } from "react";
-import {
-  Logo,
-  Container,
-  SearchBar,
-  SearchInput,
-  NewDishButton,
-} from "./styles";
+import { Container, SearchBar, SearchInput, NewDishButton } from "./styles";
 import { Hexagon } from "@phosphor-icons/react/dist/icons/Hexagon";
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/icons/MagnifyingGlass";
 import { SignOut } from "@phosphor-icons/react/dist/icons/SignOut";
+import { USER_ROLES } from "../../enums/users";
+import { Logo } from "../logo";
 
-export const Navbar: React.FC<any> = () => {
+export const Navbar: React.FC<any> = ({ user }: { user: User }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -24,15 +20,17 @@ export const Navbar: React.FC<any> = () => {
 
   return (
     <Container className="bg-dark-600">
-      <Logo>
+      <Logo user={user}>
         <div className="logo-image">
           <Hexagon weight="fill" size={30} className="text-tints-cake-100" />
         </div>
         <div className="logo-text">
           <div className="roboto bigger-bold text-light-100">food explorer</div>
-          <div className="roboto smallest-regular text-tints-cake-200 admin">
-            admin
-          </div>
+          {user?.role === USER_ROLES.ADMIN && (
+            <div className="roboto smallest-regular text-tints-cake-200 admin">
+              admin
+            </div>
+          )}
         </div>
       </Logo>
       <SearchBar
