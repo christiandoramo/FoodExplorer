@@ -5,21 +5,28 @@ export const Container = styled.div`
   height: 100dvh;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
-export const RegisterContainer = styled.div`
+export const LoginContainer = styled.div`
   width: 476px;
-  height: 621px;
+  height: 540px;
   border-radius: 16px;
-  margin: 90px 108px 112px;
-  margin-left: 0;
+  margin-right: 108px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-direction: column;
+  h1 {
+    text-align: center;
+    padding: 32px;
+  }
 `;
 export const LogoContainer = styled.div`
   margin-left: 154px;
 `;
 export const RegisterAccountButton = styled.button`
-    text-light-100
-    medium-100
-    width: 315px;
-    height: 48px;
-    border-radius: 5px;
+  width: 285px;
+  height: 48px;
+  border-radius: 5px;
 `;

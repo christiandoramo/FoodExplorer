@@ -7,6 +7,7 @@ export const Container = styled.div`
   gap: 32px;
   justify-content: center;
   align-items: center;
+  height: 50px;
 `;
 
 export const SearchBar = styled.div`

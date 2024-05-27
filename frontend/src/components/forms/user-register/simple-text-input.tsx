@@ -1,4 +1,5 @@
 import React from "react";
+import { InputContainer, TextInputElement } from "./styles";
 
 export const SimpleTextInput: React.FC<FormSimpleTextProps> = ({
   label,
@@ -9,14 +10,22 @@ export const SimpleTextInput: React.FC<FormSimpleTextProps> = ({
   placeholder,
 }) => {
   return (
-    <div>
-      <label htmlFor={name}>{label}:</label>
-      <input
+    <InputContainer>
+      <label className="text-light-400 roboto small-regular" htmlFor={name}>
+        {label}
+      </label>
+      <TextInputElement
+        className={"text-light-100 small-regular"}
         id={name}
+        type={"text"}
         {...register(name, registerOptions)}
         placeholder={placeholder}
       />
-      {error && <span>{error.message}</span>}
-    </div>
+      {error && (
+        <span className="text-tints-tomato-400 roboto small-regular">
+          {error.message}
+        </span>
+      )}
+    </InputContainer>
   );
 };

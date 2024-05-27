@@ -8,6 +8,7 @@ export const LogoContainer = styled.div`
   align-items: start;
   flex-direction: row;
   cursor: pointer;
+  min-width: 200px;
 
   .logo-text {
     display: flex;

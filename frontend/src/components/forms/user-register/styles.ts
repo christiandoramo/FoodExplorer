@@ -8,6 +8,12 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
 export const Logo = styled.div`
   display: flex;
   align-items: center;
@@ -55,4 +61,22 @@ export const NewDishButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
   display: flexç;
+`;
+
+export const TextInputElement = styled.input`
+  background-color: transparent !important;
+  padding: 12px;
+  border-color: rgba(124, 124, 138, 1);
+  border-radius: 5px;
+  text-align: left;
+  width: 285px;
+`;
+
+export const PasswordInputElement = styled.input`
+  background-color: transparent !important;
+  padding: 12px;
+  border-color: rgba(124, 124, 138, 1);
+  border-radius: 5px;
+  text-align: left;
+  width: 285px;
 `;

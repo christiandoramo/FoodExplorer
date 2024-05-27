@@ -12,7 +12,7 @@ export class UsersSearchService {
     if (user?.id !== id && role !== USER_ROLES.ADMIN)
       throw new AppError("Não autorizado", 403);
     if (!user) throw new AppError("Usuário não encontrado", 404);
-
+    delete user.refresh_token;
     delete user.password;
     return user;
   }
