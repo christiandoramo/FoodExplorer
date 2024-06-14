@@ -38,7 +38,7 @@ export const UserRegister: React.FC<any> = () => {
   const navigate = useNavigate();
 
   const registerUser = async (data: RegisterUserSchema) => {
-    toast.loading(`Criando sua conta 🤗`, { position: "top-right" });
+    toast.loading(`Criando sua conta 🤗`, { position: "bottom-right" });
     console.log("Dados para registro", data);
     const registerResponse = await userService.registerUser(data);
     if (registerResponse) {

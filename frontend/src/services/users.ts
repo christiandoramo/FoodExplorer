@@ -3,7 +3,7 @@ import api from "./api";
 class UserService {
   async registerUser(data: UserRegisterData): Promise<any> {
     try {
-      const response = await api.post("/users", data);
+      const response = await api.post("users", data);
       return response.data;
     } catch (error: any) {
       console.log(error);

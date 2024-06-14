@@ -33,7 +33,6 @@ export const Login: React.FC<any> = () => {
   const navigate = useNavigate();
 
   const login = async (data: LoginUserSchema) => {
-    console.log("Dados para login", data);
     await signIn(data);
   };
 
