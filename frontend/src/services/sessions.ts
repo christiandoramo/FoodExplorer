@@ -2,18 +2,13 @@ import api from "./api";
 import { toast } from "react-toastify";
 class SessionService {
   async login(data: UserLoginData): Promise<any> {
-    // const resolveWithSomeData = new Promise(resolve => setTimeout(() => resolve("world"), 3000));
     try {
       const loginPromise = new Promise(async (resolve, reject) => {
         try {
-          // Faz a requisição à API
           const response = await api.post("sessions", data);
-          // Espera 2 segundos
           await new Promise((res) => setTimeout(res, 2000));
-          // Resolve a promessa após a requisição e o timeout
           resolve(response);
         } catch (error) {
-          // Rejeita a promessa se a requisição falhar
           reject(error);
         }
       });
@@ -29,18 +24,15 @@ class SessionService {
           render() {
             return `Logado com sucesso 👌`;
           },
-          theme: "dark",
         },
         error: {
           render({ data }: { data: any }) {
-            // When the promise reject, data will contains the error
             return `${
               data?.response?.data?.message ||
               data?.message ||
               "Ocorreu um erro"
             }`;
           },
-          theme: "dark",
         },
       });
     } catch (error: any) {
@@ -50,8 +42,40 @@ class SessionService {
   }
   async logoff(): Promise<any> {
     try {
-      const response = await api.get("/sessions");
-      return response.data;
+      const logoffPromise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await api.get("sessions");
+          await new Promise((res) => setTimeout(res, 2000));
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      return toast.promise(logoffPromise, {
+        pending: {
+          render() {
+            return `Desconectando, aguarde!`;
+          },
+          theme: "dark",
+        },
+        success: {
+          render() {
+            return `Você está desconectado`;
+          },
+          theme: "dark",
+        },
+        error: {
+          render({ data }: { data: any }) {
+            return `${
+              data?.response?.data?.message ||
+              data?.message ||
+              "Ocorreu um erro"
+            }`;
+          },
+          theme: "dark",
+        },
+      });
     } catch (error: any) {
       console.log(error);
       return error?.response?.message || error;

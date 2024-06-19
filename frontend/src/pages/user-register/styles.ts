@@ -2,24 +2,70 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100dvw;
-  height: 100%;
+  height: 100dvh;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 export const RegisterContainer = styled.div`
   width: 476px;
-  height: 621px;
+  height: 540px;
   border-radius: 16px;
-  margin: 90px 108px 112px;
-  margin-left: 0;
+  margin-right: 108px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  flex-direction: column;
+  h1 {
+    text-align: center;
+    padding: 0 32px;
+  }
+  p {
+    cursor: pointer;
+    &:hover {
+      color: orange;
+    }
+  }
+  @media (max-width: 768px) {
+    background-color: transparent !important;
+    h1 {
+      display: none;
+    }
+    margin: 0;
+    padding: 0 50px;
+    width: 100%;
+    gap: 40px;
+    border: none;
+  }
 `;
 export const LogoContainer = styled.div`
   margin-left: 154px;
+  @media (max-width: 768px) {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
 `;
 export const RegisterAccountButton = styled.button`
-    text-light-100
-    medium-100
-    width: 315px;
-    height: 48px;
-    border-radius: 5px;
+  width: 285px;
+  height: 48px;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: black;
+  }
+  @media (max-width: 768px) {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
 `;

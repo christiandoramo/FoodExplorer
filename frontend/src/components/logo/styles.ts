@@ -15,6 +15,7 @@ export const LogoContainer = styled.div`
     flex-direction: column;
     align-items: end;
     justify-content: end;
+}
   }
   .admin {
     margin-top: -7px;

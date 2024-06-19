@@ -16,7 +16,7 @@ export async function ensureAuthenticated(
   next: NextFunction
 ) {
   try {
-    console.log("headers: ", request?.headers);
+    // console.log("headers: ", request?.headers);
     const authHeader = request?.headers?.authorization;
 
     if (!authHeader) throw new AppError("Não autenticado", 401);

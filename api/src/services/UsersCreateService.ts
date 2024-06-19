@@ -6,8 +6,14 @@ import * as z from "zod";
 // Defina o esquema usando Zod
 const createUserSchema = z.object({
   name: z.string(),
-  email: z.string().email(), // Certifica-se de que o e-mail está em um formato válido
-  password: z.string().min(3), // Exige que a senha tenha pelo menos 6 caracteres
+  email: z.string().email(),
+  password: z.string().min(3),
+
+  // password: z
+  // .string()
+  // .min(5, "Pelo menos 5 caracteres")
+  // .regex(/[A-Z]/, "Pelo menos uma letra maiúscula")
+  // .regex(/[0-9]/, "Pelo menos um número"),
 });
 
 export class UsersCreateService {

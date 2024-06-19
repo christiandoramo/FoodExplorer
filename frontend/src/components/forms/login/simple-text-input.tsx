@@ -15,7 +15,7 @@ export const SimpleTextInput: React.FC<FormSimpleTextProps> = ({
         {label}
       </label>
       <TextInputElement
-        className={"text-light-100 small-regular bg-dark-900"}
+        className={"text-light-100 small-regular"}
         id={name}
         type={"text"}
         {...register(name, registerOptions)}

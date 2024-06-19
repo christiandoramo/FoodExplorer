@@ -80,19 +80,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     if (!user) return;
-    const response = await toast.promise(sessionService.logoff, {
-      pending: "Deslogando",
-      success: "Deslogado com sucesso 👌",
-      error: "Ocorreu um erro: ",
-    });
+    const response = await sessionService.logoff();
     if (response) {
       removeCookie("@food_explorer/refresh_token", { path: "/" });
       localStorage.removeItem("@food_explorer/session_token");
       setUser({ email: "", id: "", name: "", role: "" });
-      toast.warning("Deslogado com sucesso");
       navigate("/login");
-    } else {
-      toast.warning("Ocorreu um problema");
     }
   };
 

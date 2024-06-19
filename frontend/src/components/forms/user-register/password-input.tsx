@@ -15,7 +15,7 @@ export const PasswordInput: React.FC<FormSimpleTextProps> = ({
         {label}
       </label>
       <PasswordInputElement
-        className={"text-light-100 small-regular"}
+        className={"bg-light-100 text-light-100 small-regular bg-dark-900"}
         id={name}
         type={"password"}
         {...register(name, registerOptions)}
