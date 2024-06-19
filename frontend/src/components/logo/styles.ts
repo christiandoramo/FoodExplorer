@@ -8,12 +8,14 @@ export const LogoContainer = styled.div`
   align-items: start;
   flex-direction: row;
   cursor: pointer;
+  min-width: 200px;
 
   .logo-text {
     display: flex;
     flex-direction: column;
     align-items: end;
     justify-content: end;
+}
   }
   .admin {
     margin-top: -7px;

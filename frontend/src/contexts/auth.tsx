@@ -25,57 +25,67 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [, , removeCookie] = useCookies(["@food_explorer/refresh_token"]);
 
   const signIn = async ({ email, password }: UserLoginData) => {
-    try {
-      toast.loading("Realizando login");
-      const response = await sessionService.login({ email, password });
-      if (response) {
-        api.defaults.withCredentials = true;
-        localStorage.setItem(
-          "@food_explorer/session_token",
-          JSON.stringify(response.data.session_token)
-        );
-        const foundUser: User = await toast.promise(
-          () => userService.getUserById(response.data.user_id),
-          {
-            pending: "logando",
-            success: "Logado com sucesso 👌",
-            error: "Ocorreu um erro: ",
-          }
-        );
-        if (foundUser) {
-          setUser(foundUser);
-          toast.success("Login realizado com sucesso");
-          navigate("/home");
-        }
-      } else {
-        toast.error(
-          `Ocorreu um erro: ${response?.message || response?.response?.message}`
-        );
+    const response = await sessionService.login({ email, password });
+    if (response) {
+      localStorage.setItem(
+        "@food_explorer/session_token",
+        JSON.stringify(response.data.session_token)
+      );
+      api.defaults.headers.common = {
+        Authorization: "Bearer " + response.data.session_token,
+      };
+
+      const foundUserPromise = new Promise((resolve) =>
+        resolve(userService.getUserById(response.data.user_id))
+      );
+
+      const foundUser: any = toast.promise(foundUserPromise, {
+        pending: {
+          render() {
+            return `Buscando dados do usuário`;
+          },
+          icon: false,
+          theme: "dark",
+        },
+        success: {
+          render({ data }: { data: any }) {
+            return `Olá, ${data?.name}! 🤗`;
+          },
+          theme: "dark",
+        },
+        error: {
+          render({ data }: { data: any }) {
+            // When the promise reject, data will contains the error
+            return `${
+              data?.response?.data?.message ||
+              data?.message ||
+              "Ocorreu um erro"
+            }`;
+          },
+          theme: "dark",
+        },
+      });
+
+      if (foundUser) {
+        setUser(foundUser);
+        // toast.success("Login realizado com sucesso");
+        navigate("/home");
       }
-    } catch (e: any) {
-      if (e.response) {
-        toast.error(e.response.data.message);
-      } else {
-        console.error("Ocorreu um erro: ", e);
-      }
+    } else {
+      // toast.error(
+      //   `Ocorreu um erro: ${response?.message || response?.response?.message}`
+      // );
     }
   };
 
   const signOut = async () => {
-    const response = await toast.promise(sessionService.logoff, {
-      pending: "Deslogando",
-      success: "Deslogado com sucesso 👌",
-      error: "Ocorreu um erro: ",
-    });
+    if (!user) return;
+    const response = await sessionService.logoff();
     if (response) {
       removeCookie("@food_explorer/refresh_token", { path: "/" });
       localStorage.removeItem("@food_explorer/session_token");
       setUser({ email: "", id: "", name: "", role: "" });
-      api.defaults.withCredentials = false;
-      toast.warning("Deslogado com sucesso");
       navigate("/login");
-    } else {
-      toast.warning("Ocorreu um problema");
     }
   };
 
@@ -105,8 +115,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     }
-    reconnect();
-  }, []);
+    if (!user) reconnect();
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ signIn, signOut, user }}>

@@ -1,4 +1,5 @@
 import React from "react";
+import { InputContainer, PasswordInputElement } from "./styles";
 
 export const PasswordInput: React.FC<FormSimpleTextProps> = ({
   label,
@@ -9,15 +10,22 @@ export const PasswordInput: React.FC<FormSimpleTextProps> = ({
   placeholder,
 }) => {
   return (
-    <div>
-      <label htmlFor={name}>{label}:</label>
-      <input
+    <InputContainer>
+      <label className="text-light-400 roboto small-regular" htmlFor={name}>
+        {label}
+      </label>
+      <PasswordInputElement
+        className={"bg-light-100 text-light-100 small-regular bg-dark-900"}
         id={name}
         type={"password"}
         {...register(name, registerOptions)}
         placeholder={placeholder}
       />
-      {error && <span>{error.message}</span>}
-    </div>
+      {error && (
+        <span className="text-tints-tomato-400 roboto small-regular">
+          {error.message}
+        </span>
+      )}
+    </InputContainer>
   );
 };

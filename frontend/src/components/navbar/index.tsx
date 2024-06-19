@@ -5,10 +5,12 @@ import { MagnifyingGlass } from "@phosphor-icons/react/dist/icons/MagnifyingGlas
 import { SignOut } from "@phosphor-icons/react/dist/icons/SignOut";
 import { USER_ROLES } from "../../enums/users";
 import { Logo } from "../logo";
+import { useAuth } from "../../contexts/auth";
 
 export const Navbar: React.FC<any> = ({ user }: { user: User }) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const { signOut } = useAuth();
 
   const handleExpandInput = () => {
     setIsExpanded(true);
@@ -59,7 +61,12 @@ export const Navbar: React.FC<any> = ({ user }: { user: User }) => {
       <NewDishButton className="medium-100 text-light-100 bg-tints-tomato-100">
         Novo prato
       </NewDishButton>
-      <SignOut size={32} className="text-light-100" cursor={"pointer"} />
+      <SignOut
+        onClick={signOut}
+        size={32}
+        className="text-light-100"
+        cursor={"pointer"}
+      />
     </Container>
   );
 };

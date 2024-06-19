@@ -67,6 +67,7 @@ export const NewDishButton = styled.button`
 `;
 
 export const TextInputElement = styled.input`
+  background-color: transparent !important;
   padding: 12px;
   border-color: rgba(124, 124, 138, 1);
   border-radius: 5px;
@@ -78,6 +79,7 @@ export const TextInputElement = styled.input`
 `;
 
 export const PasswordInputElement = styled.input`
+  background-color: transparent !important;
   padding: 12px;
   border-color: rgba(124, 124, 138, 1);
   border-radius: 5px;

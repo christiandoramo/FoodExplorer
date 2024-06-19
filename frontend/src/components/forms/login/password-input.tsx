@@ -1,7 +1,7 @@
 import React from "react";
-import { InputContainer, TextInputElement } from "./styles";
+import { InputContainer, PasswordInputElement } from "./styles";
 
-export const SimpleTextInput: React.FC<FormSimpleTextProps> = ({
+export const PasswordInput: React.FC<FormSimpleTextProps> = ({
   label,
   name,
   register,
@@ -14,10 +14,10 @@ export const SimpleTextInput: React.FC<FormSimpleTextProps> = ({
       <label className="text-light-400 roboto small-regular" htmlFor={name}>
         {label}
       </label>
-      <TextInputElement
-        className={"text-light-100 small-regular bg-dark-900"}
+      <PasswordInputElement
+        className={"text-light-100 small-regular"}
         id={name}
-        type={"text"}
+        type={"password"}
         {...register(name, registerOptions)}
         placeholder={placeholder}
       />

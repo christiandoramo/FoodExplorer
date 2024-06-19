@@ -2,21 +2,21 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { PasswordInput } from "../../components/forms/user-register/password-input";
-import { SimpleTextInput } from "../../components/forms/user-register/simple-text-input";
-import { Container, RegisterAccountButton, RegisterContainer } from "./styles";
+import { PasswordInput } from "../../components/forms/login/password-input";
+import { SimpleTextInput } from "../../components/forms/login/simple-text-input";
+import {
+  Container,
+  LoginContainer,
+  LogoContainer,
+  LoginButton,
+} from "./styles";
 import { Logo } from "../../components/logo";
-import Backdrop from "@mui/material/Backdrop";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/auth";
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(5, "A senha deve ter no mínimo 5 caracteres")
-    .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
-    .regex(/[0-9]/, "A senha deve conter pelo menos um número"),
+  email: z.string().email("Insira um email válido"),
+  password: z.string().min(1, "A senha está vazia"),
 });
 
 type LoginUserSchema = z.infer<typeof loginSchema>;
@@ -31,38 +31,23 @@ export const Login: React.FC<any> = () => {
     resolver: zodResolver(loginSchema),
   });
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   const login = async (data: LoginUserSchema) => {
-    handleOpen();
-    console.log("Dados para login", data);
-    await signIn(data).finally(() => handleClose());
-    handleClose();
+    await signIn(data);
   };
 
   return (
-    <Container>
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-        // onClick={handleClose}
-      >
-        {/* <CircularProgress color="inherit" /> */}
-      </Backdrop>
-      <Logo />
-      <RegisterContainer className="bg-dark-700">
-        <form onSubmit={handleSubmit(login)}>
-          <h1 className="text-light-100 medium-400">Crie sua conta</h1>
+    <form onSubmit={handleSubmit(login)}>
+      <Container className="bg-dark-400">
+        <LogoContainer>
+          <Logo isLp />
+        </LogoContainer>
+        <LoginContainer className="bg-dark-700">
+          <h1 className="text-light-100 medium-400">Login</h1>
           <SimpleTextInput
             label="Email"
             name="email"
-            placeholder="Exemplo: exemplo@exemplo.com.br"
+            placeholder="Insira seu email aqui"
             register={register}
             error={errors.email}
             registerOptions={{ required: true }}
@@ -70,26 +55,26 @@ export const Login: React.FC<any> = () => {
           <PasswordInput
             label="Senha"
             name="password"
-            placeholder="No mínimo 5 caracteres - letras e numeros"
+            placeholder="Insira sua senha aqui"
             register={register}
             error={errors.password}
             registerOptions={{ required: true }}
           />
-          <RegisterAccountButton
+          <LoginButton
             className="bg-tints-tomato-100 text-light-100"
             type="submit"
           >
             Entrar
-          </RegisterAccountButton>
+          </LoginButton>
           <p
-            onClick={() => navigate("user-register")}
+            onClick={() => navigate("/user-register")}
             style={{ cursor: "pointer" }}
             className="medium-100 text-light-100"
           >
             Criar conta
           </p>
-        </form>
-      </RegisterContainer>
-    </Container>
+        </LoginContainer>
+      </Container>
+    </form>
   );
 };
