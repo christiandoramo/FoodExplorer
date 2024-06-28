@@ -1,8 +1,5 @@
 import { db } from "../database";
 
-interface IngredientData {
-  name: string;
-}
 export class CartsRepository {
   async create(userId: string) {
     const [result] = await db("carts")

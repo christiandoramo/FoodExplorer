@@ -1,18 +1,15 @@
 import { db } from "../database";
-import crypto from "crypto";
+import { PRODUCT_CATEGORY } from "../enums/category";
+import { IngredientData } from "../interfaces/ingredientData";
 
 interface ProductData {
   id?: string;
   name: string;
-  category: string;
+  category: PRODUCT_CATEGORY;
   description: string;
   price: number;
   avatar: string;
   ingredients: IngredientData[];
-}
-
-interface IngredientData {
-  name: string;
 }
 
 export class ProductsRepository {

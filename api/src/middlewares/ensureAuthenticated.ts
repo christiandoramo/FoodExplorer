@@ -2,6 +2,7 @@ import AppError from "../utils/AppError";
 import { verify } from "jsonwebtoken";
 import authConfig from "../configs/auth";
 import { Request, Response, NextFunction } from "express";
+import { SessionsRefreshController } from "../controllers/SessionsRefreshController";
 
 interface ExtendedRequest extends Request {
   user?: {
@@ -16,7 +17,6 @@ export async function ensureAuthenticated(
   next: NextFunction
 ) {
   try {
-    // console.log("headers: ", request?.headers);
     const authHeader = request?.headers?.authorization;
 
     if (!authHeader) throw new AppError("Não autenticado", 401);
@@ -26,13 +26,18 @@ export async function ensureAuthenticated(
       [key: string]: any;
     };
     const { id, role } = decoded;
-    request.user = {
-      id: id,
-      role: role,
-    };
-
+    // if (request?.user?.id !== id || request?.user?.role !== role) {
+    //   throw new AppError("Não autenticado", 401);
+    // }
+    request.user = { id, role };
     return next();
   } catch (error) {
-    return response.redirect("refresh-session");
+    // faltando tirar redirecionar e colocar serviço de refresh session diretamente
+    // isso apenas está redirecionando o navegador para o url do backend + /refresh-session
+    // nao está fazendo o uso do axios...
+    console.log("entrou aqui: ", error);
+    const sessionsRefreshController = new SessionsRefreshController();
+    sessionsRefreshController.create(request, response);
+    return;
   }
 }

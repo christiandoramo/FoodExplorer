@@ -3,10 +3,7 @@ import { ProductsCreateService } from "../services/ProductsCreateService";
 import { ProductsSearchService } from "../services/ProductsSearchService";
 import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsDeleteService } from "../services/ProductsDeleteService";
-
-interface IngredientData {
-  name: string;
-}
+import { IngredientData } from "../interfaces/ingredientData";
 
 interface ProductSearchData {
   id?: string;
@@ -14,19 +11,27 @@ interface ProductSearchData {
   ingredients?: IngredientData[];
 }
 
+interface ProductRequest extends Request {
+  file?: Express.Multer.File;
+}
 export class ProductsController {
-  async create(request: Request, response: Response) {
-    const { name, description, category, price, file, ingredients } =
-      request.body;
+  async create(request: ProductRequest, response: Response) {
+    console.log("Request.body ProductsController: ", request.body);
+    console.log("Request.file ProductsController: ", request?.file);
+    const { name, description, category, price, ingredients } = request.body;
+    const file = request?.file;
+    const parsedIngredients = JSON.parse(ingredients) || [];
+
     const productsRepository = new ProductsRepository();
     const productsCreateService = new ProductsCreateService(productsRepository);
+
     const newProduct = await productsCreateService.execute({
       name,
       description,
       category,
       price,
       file,
-      ingredients,
+      ingredients: parsedIngredients,
     });
     return response.status(201).json(newProduct);
   }
