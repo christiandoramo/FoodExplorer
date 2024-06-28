@@ -3,21 +3,14 @@ import { ProductsCreateService } from "../services/ProductsCreateService";
 import { ProductsSearchService } from "../services/ProductsSearchService";
 import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsDeleteService } from "../services/ProductsDeleteService";
-import { IngredientData } from "../interfaces/ingredientData";
-
-interface ProductSearchData {
-  id?: string;
-  name?: string;
-  ingredients?: IngredientData[];
-}
+import AppError from "../utils/AppError";
+import { z } from "zod";
 
 interface ProductRequest extends Request {
   file?: Express.Multer.File;
 }
 export class ProductsController {
   async create(request: ProductRequest, response: Response) {
-    console.log("Request.body ProductsController: ", request.body);
-    console.log("Request.file ProductsController: ", request?.file);
     const { name, description, category, price, ingredients } = request.body;
     const file = request?.file;
     const parsedIngredients = JSON.parse(ingredients) || [];
@@ -39,19 +32,30 @@ export class ProductsController {
     const { id } = request.params;
     const productsRepository = new ProductsRepository();
     const productsSearchService = new ProductsSearchService(productsRepository);
-    const product = await productsSearchService.execute({ id });
+    const product = await productsSearchService.findById(id);
     return response.status(201).json(product);
   }
 
-  async index(request: Request, response: Response) {
-    const { input } = request.query;
+  async search(request: Request, response: Response) {
+    const { slug, limit, offset } = request.query;
     const productsRepository = new ProductsRepository();
     const productsSearchService = new ProductsSearchService(productsRepository);
-    let searchTerm;
-    if (typeof input === "string") {
-      searchTerm = input;
-    }
-    const products = await productsSearchService.execute({ input: searchTerm });
+    const products = await productsSearchService.findBySlug({
+      slug: (slug as string) || undefined,
+      limit: Number(limit) || undefined,
+      offset: Number(offset) || undefined,
+    });
+    return response.status(201).json(products);
+  }
+
+  async index(request: Request, response: Response) {
+    const { limit, offset } = request?.query;
+    const productsRepository = new ProductsRepository();
+    const productsSearchService = new ProductsSearchService(productsRepository);
+    const products = await productsSearchService.findAll({
+      limit: Number(limit),
+      offset: Number(offset),
+    });
     return response.status(201).json(products);
   }
   async delete(request: Request, response: Response) {

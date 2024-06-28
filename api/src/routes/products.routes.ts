@@ -14,7 +14,12 @@ productsRoutes.post(
   ensureAuthorization,
   productsController.create
 );
-productsRoutes.delete("/:id", ensureAuthorization, productsController.delete);
-productsRoutes.get("/:id", productsController.show);
-productsRoutes.get("search", productsController.index);
+productsRoutes.delete(
+  "/delete:id",
+  ensureAuthorization,
+  productsController.delete
+);
+productsRoutes.get("/show/:id", productsController.show);
+productsRoutes.get("/search", productsController.search);
+productsRoutes.get("/index", productsController.index);
 export { productsRoutes };
