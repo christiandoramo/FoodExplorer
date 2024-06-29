@@ -5,6 +5,7 @@ import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsDeleteService } from "../services/ProductsDeleteService";
 import AppError from "../utils/AppError";
 import { z } from "zod";
+import { PRODUCT_CATEGORY } from "../enums/category";
 
 interface ProductRequest extends Request {
   file?: Express.Multer.File;
@@ -37,26 +38,44 @@ export class ProductsController {
   }
 
   async search(request: Request, response: Response) {
-    const { slug, limit, offset } = request.query;
+    // search tras todos os dados, ou por slug, ou por category
+    const { slug, limit, offset, category } = request.query;
     const productsRepository = new ProductsRepository();
     const productsSearchService = new ProductsSearchService(productsRepository);
-    const products = await productsSearchService.findBySlug({
-      slug: (slug as string) || undefined,
-      limit: Number(limit) || undefined,
-      offset: Number(offset) || undefined,
+    if (!!slug) {
+      const productsBySlug = await productsSearchService.findBySlug({
+        slug: (slug as string) || undefined,
+        limit: Number(limit) || undefined,
+        offset: Number(offset) || undefined,
+      });
+      return response.status(201).json(productsBySlug);
+    } else if (!!category) {
+      const productsByCategory =
+        await productsSearchService.findProductsByCategory({
+          category: (category as string) || undefined,
+          limit: Number(limit) || undefined,
+          offset: Number(offset) || undefined,
+        });
+      return response.status(201).json(productsByCategory);
+    }
+    // trás todos se não tiver nenhuma query como slug ou category
+    const products = await productsSearchService.findCategorized({
+      limit: Number(limit),
+      offset: Number(offset),
     });
     return response.status(201).json(products);
   }
 
   async index(request: Request, response: Response) {
-    const { limit, offset } = request?.query;
+    // index traz dados por categoria
+    const { limit, offset } = request.query;
     const productsRepository = new ProductsRepository();
     const productsSearchService = new ProductsSearchService(productsRepository);
-    const products = await productsSearchService.findAll({
+    const categorizedProducts = await productsSearchService.findCategorized({
       limit: Number(limit),
       offset: Number(offset),
     });
-    return response.status(201).json(products);
+    return response.status(201).json(categorizedProducts);
   }
   async delete(request: Request, response: Response) {
     const { id } = request.params;

@@ -20,6 +20,6 @@ productsRoutes.delete(
   productsController.delete
 );
 productsRoutes.get("/show/:id", productsController.show);
-productsRoutes.get("/search", productsController.search);
-productsRoutes.get("/index", productsController.index);
+productsRoutes.get("/search", productsController.search); // traz com filtros ou todos
+productsRoutes.get("/index", productsController.index); // traz categorizado
 export { productsRoutes };

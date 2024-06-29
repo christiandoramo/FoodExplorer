@@ -118,31 +118,7 @@ export class ProductsRepository {
         let productsWithIngredients;
 
         if (products.length === 1) {
-          if (!allIngredients.length) {
-            return [
-              {
-                ...products[0],
-                ingredients: [],
-              },
-            ];
-          } else if (allIngredients.length === 1) {
-            return [
-              {
-                ...products[0],
-                ingredients: allIngredients,
-              },
-            ];
-          } else if (allIngredients.length > 1) {
-            const productIngredients = allIngredients.filter(
-              (ingredient: any) => ingredient.product_id === products[0].id
-            );
-            return [
-              {
-                ...products[0],
-                ingredients: productIngredients,
-              },
-            ];
-          }
+          return this.getProductWithIngredients(products[0], allIngredients);
         }
         productsWithIngredients = products.map((product: any) => {
           const productIngredients = allIngredients.filter(
@@ -199,6 +175,118 @@ export class ProductsRepository {
     }
   }
 
+  async findCategorizedProducts({
+    limit,
+    offset,
+  }: {
+    limit?: number;
+    offset?: number;
+  }) {
+    // Define os limites padrão
+    limit = limit && limit > 0 && limit <= 100 ? limit : 100;
+    offset = offset && offset >= 0 ? offset : 0;
+
+    try {
+      // Busca todas as categorias distintas na tabela de produtos
+      const categories = await db("products").distinct("category");
+
+      // Objeto para armazenar os produtos categorizados
+      const categorizedProducts: Record<string, any[]> = {};
+
+      // Itera sobre cada categoria para buscar os produtos
+      for (const categoryObj of categories) {
+        const categoryName = categoryObj.category;
+
+        // Busca limitada de produtos para cada categoria
+        const products = await db("products")
+          .where("category", categoryName)
+          .orderBy("price", "asc")
+          .limit(limit)
+          .offset(offset);
+
+        // Se não há produtos na categoria, continue para a próxima
+        if (products.length === 0) {
+          continue;
+        } else if (products.length === 1) {
+          const allIngredients = await db("ingredients").whereIn(
+            "product_id",
+            products[0].id
+          );
+          categorizedProducts[categoryName] = this.getProductWithIngredients(
+            products[0],
+            allIngredients
+          );
+          continue;
+        }
+
+        // Busca todos os ingredientes associados aos produtos desta categoria
+        const productIds = products.map((product) => product.id);
+        const allIngredients = await db("ingredients").whereIn(
+          "product_id",
+          productIds
+        );
+        // Associa os ingredientes aos produtos
+        const productsWithIngredients = products.map((product) => {
+          const ingredients = allIngredients.filter(
+            (ingredient) => ingredient.product_id === product.id
+          );
+          return { ...product, ingredients };
+        });
+        categorizedProducts[categoryName] = productsWithIngredients;
+      }
+      return categorizedProducts;
+    } catch (error) {
+      console.error("Erro ao buscar produtos categorizados:", error);
+      throw error;
+    }
+  }
+  async findProductsByCategory({
+    limit,
+    offset,
+    category,
+  }: {
+    limit?: number;
+    offset?: number;
+    category: PRODUCT_CATEGORY;
+  }) {
+    limit = limit && limit > 0 && limit <= 100 ? limit : 10;
+    offset = offset && offset >= 0 ? offset : 0;
+    try {
+      const products = await db("products")
+        .where("category", category)
+        .orderBy("price", "asc")
+        .limit(limit)
+        .offset(offset);
+
+      if (!products.length) return [];
+      else if (products.length === 1) {
+        const allIngredients = await db("ingredients").whereIn(
+          "product_id",
+          products[0].id
+        );
+        return this.getProductWithIngredients(products[0], allIngredients);
+      }
+
+      const productIds = products.map((product) => product.id);
+      const allIngredients = await db("ingredients").whereIn(
+        "product_id",
+        productIds
+      );
+
+      const productsWithIngredients = products.map((product) => {
+        const ingredients = allIngredients.filter(
+          (ingredient) => ingredient.product_id === product.id
+        );
+        return {
+          ...product,
+          ingredients: ingredients,
+        };
+      });
+
+      return productsWithIngredients;
+    } catch (error) {}
+  }
+
   async findById(id: string) {
     const product = await db("products").where({ id }).first();
     const ingredients = await db("ingredients").where({ product_id: id });
@@ -209,5 +297,21 @@ export class ProductsRepository {
     await db("item_products").where({ product_id: id }).delete();
     await db("ingredients").where({ product_id: id }).delete();
     return await db("products").where({ id }).delete();
+  }
+
+  getProductWithIngredients(product: any, allIngredients: any[]): any {
+    // Check the length of allIngredients
+    const ingredients = !allIngredients.length
+      ? []
+      : allIngredients.length === 1
+      ? allIngredients
+      : allIngredients.filter(
+          (ingredient: any) => ingredient.product_id === product.id
+        );
+
+    return {
+      ...product,
+      ingredients: ingredients,
+    };
   }
 }
