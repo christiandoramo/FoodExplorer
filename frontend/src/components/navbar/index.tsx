@@ -7,10 +7,10 @@ import { USER_ROLES } from "../../enums/users";
 import { Logo } from "../logo";
 import { useAuth } from "../../contexts/auth";
 
-export const Navbar: React.FC<any> = ({ user }: { user: User }) => {
+export const Navbar: React.FC<any> = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   const handleExpandInput = () => {
     setIsExpanded(true);

@@ -22,7 +22,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     name: "",
     role: "",
   });
-  const [, , removeCookie] = useCookies(["@food_explorer/refresh_token"]);
+  const [, , removeCookie] = useCookies([
+    "@food_explorer/refresh_token",
+    "@food_explorer/user_id",
+  ]);
 
   const signIn = async ({ email, password }: UserLoginData) => {
     const response = await sessionService.login({ email, password });
@@ -39,7 +42,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         resolve(userService.getUserById(response.data.user_id))
       );
 
-      const foundUser: any = toast.promise(foundUserPromise, {
+      const foundUser: any = await toast.promise(foundUserPromise, {
         pending: {
           render() {
             return `Buscando dados do usuário`;
@@ -68,7 +71,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (foundUser) {
         setUser(foundUser);
-        // toast.success("Login realizado com sucesso");
         navigate("/home");
       }
     } else {
@@ -83,6 +85,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const response = await sessionService.logoff();
     if (response) {
       removeCookie("@food_explorer/refresh_token", { path: "/" });
+      removeCookie("@food_explorer/user_id", { path: "/" });
       localStorage.removeItem("@food_explorer/session_token");
       setUser({ email: "", id: "", name: "", role: "" });
       navigate("/login");

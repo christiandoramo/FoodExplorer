@@ -15,7 +15,7 @@ export const SearchBar = styled.div`
   align-items: center;
   justify-content: center;
   align-items: center;
-  height: 48px;
+  height: 40px;
   width: 581px;
   border-radius: 5px;
   gap: 20px;
@@ -31,7 +31,7 @@ export const SearchInput = styled.input<{ expanded: boolean }>`
 `;
 
 export const NewDishButton = styled.button`
-  height: 48px;
+  height: 40px;
   width: 216px;
   border: none;
   border-radius: 5px;
