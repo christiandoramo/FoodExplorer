@@ -30,11 +30,29 @@ export const SearchInput = styled.input<{ expanded: boolean }>`
   text-align: left;
 `;
 
-export const NewDishButton = styled.button`
+export const OrdersButton = styled.button`
   height: 40px;
   width: 216px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  display: flexç;
+  display: flex;
+  &:hover {
+    color: orange;
+    background-color: transparent;
+    border: 1px white solid;
+  }
+`;
+
+export const NoBackgroundButton = styled.button`
+  height: 40px;
+  width: 216px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  transition: width 0.3s ease-in-out;
+  &:hover {
+    color: orange;
+  }
 `;

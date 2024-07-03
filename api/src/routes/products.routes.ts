@@ -21,5 +21,5 @@ productsRoutes.delete(
 );
 productsRoutes.get("/show/:id", productsController.show);
 productsRoutes.get("/search", productsController.search); // traz com filtros ou todos
-productsRoutes.get("/index", productsController.index); // traz categorizado
+productsRoutes.get("/index", productsController.index); // traz produtos categorizado
 export { productsRoutes };

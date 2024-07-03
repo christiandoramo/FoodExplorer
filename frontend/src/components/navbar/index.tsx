@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import { Container, SearchBar, SearchInput, NewDishButton } from "./styles";
+import {
+  Container,
+  SearchBar,
+  SearchInput,
+  OrdersButton,
+  NoBackgroundButton,
+} from "./styles";
 import { Hexagon } from "@phosphor-icons/react/dist/icons/Hexagon";
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/icons/MagnifyingGlass";
 import { SignOut } from "@phosphor-icons/react/dist/icons/SignOut";
 import { USER_ROLES } from "../../enums/users";
 import { Logo } from "../logo";
 import { useAuth } from "../../contexts/auth";
+import { Receipt } from "@phosphor-icons/react";
 
 export const Navbar: React.FC<any> = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -18,6 +25,18 @@ export const Navbar: React.FC<any> = () => {
 
   const handleBlurInput = () => {
     setIsExpanded(false);
+  };
+
+  const handleGotoOrders = () => {
+    // admin vê todos os pedidos (concluidos incluso)
+    // usuario comum vê seus pedidos apenas em andamento
+  };
+  const handleGotoFavorites = () => {
+    // admin vê todos os favoritos
+    // usuario comum vê seus favoritos
+  };
+  const handleGotoNewDish = () => {
+    // admin novo produto (exclusivo do admin)
   };
 
   return (
@@ -58,9 +77,28 @@ export const Navbar: React.FC<any> = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </SearchBar>
-      <NewDishButton className="medium-100 text-light-100 bg-tints-tomato-100">
-        Novo prato
-      </NewDishButton>
+      <NoBackgroundButton onClick={handleGotoFavorites}>
+        {user.role === USER_ROLES.DEFAULT ? `Meus favoritos` : `Favoritos`}
+      </NoBackgroundButton>
+      <NoBackgroundButton
+        onClick={
+          user.role === USER_ROLES.DEFAULT
+            ? handleGotoOrders
+            : handleGotoNewDish
+        }
+      >
+        {user.role === USER_ROLES.DEFAULT
+          ? `Histórico de pedidos`
+          : `Novo prato`}
+      </NoBackgroundButton>
+      <OrdersButton
+        onClick={handleGotoOrders}
+        className="medium-100 text-light-100 bg-tints-tomato-100"
+      >
+        <Receipt size={22} />
+        {` Pedidos (${0})`}
+      </OrdersButton>
+
       <SignOut
         onClick={signOut}
         size={32}
