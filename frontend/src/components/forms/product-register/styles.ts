@@ -9,12 +9,24 @@ export const InputContainer = styled.div`
   }
 `;
 
-export const TextInputElement = styled.input`
+export const StringInputElement = styled.input`
   padding: 12px;
   border-color: rgba(124, 124, 138, 1);
   border-radius: 5px;
   text-align: left;
   width: 463px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+export const TextInputElement = styled.input`
+  padding: 12px;
+  border-color: rgba(124, 124, 138, 1);
+  border-radius: 5px;
+  text-align: left;
+  width: 1120px;
+  height: 172px;
   @media (max-width: 768px) {
     width: 100%;
   }

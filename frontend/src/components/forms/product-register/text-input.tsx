@@ -1,7 +1,7 @@
 import React from "react";
-import { InputContainer, StringInputElement } from "./styles";
+import { InputContainer, TextInputElement } from "./styles";
 
-export const NameInput: React.FC<FormSimpleTextProps> = ({
+export const TextInput: React.FC<FormSimpleTextProps> = ({
   label,
   name,
   register,
@@ -14,7 +14,7 @@ export const NameInput: React.FC<FormSimpleTextProps> = ({
       <label className="text-light-400 roboto small-regular" htmlFor={name}>
         {label}
       </label>
-      <StringInputElement
+      <TextInputElement
         className={"text-light-100 small-regular bg-dark-900"}
         id={name}
         type={"text"}

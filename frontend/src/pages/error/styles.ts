@@ -6,18 +6,24 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-direction: column;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
-
-export const CreateContainer = styled.div`
-  padding: 116px 122px;
-  gap: 32px;
+export const LoginContainer = styled.div`
+  width: 476px;
+  height: 540px;
   border-radius: 16px;
-  flex-direction: column;
+  margin-right: 108px;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-direction: column;
   h1 {
     text-align: center;
-    padding: 0 32px;
+    padding: 32px;
   }
   p {
     cursor: pointer;
@@ -37,7 +43,6 @@ export const CreateContainer = styled.div`
     border: none;
   }
 `;
-
 export const LogoContainer = styled.div`
   margin-left: 154px;
   @media (max-width: 768px) {
@@ -48,14 +53,10 @@ export const LogoContainer = styled.div`
     margin: 0;
   }
 `;
-export const CreateNewDishButton = styled.button`
+export const LoginButton = styled.button`
   width: 285px;
   height: 48px;
   border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    background-color: black;
-  }
   @media (max-width: 768px) {
     justify-content: center;
     display: flex;
@@ -63,10 +64,4 @@ export const CreateNewDishButton = styled.button`
     width: 100%;
     margin: 0;
   }
-`;
-
-export const IngredientContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
 `;

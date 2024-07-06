@@ -1,5 +1,10 @@
-import React from "react";
-import { Container, CreateNewDishButton, CreateContainer } from "./styles";
+import React, { useState } from "react";
+import {
+  Container,
+  CreateNewDishButton,
+  CreateContainer,
+  IngredientContainer,
+} from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,10 +14,13 @@ import { PRODUCT_CATEGORY } from "../../enums/category";
 import { ProductRegisterData } from "../../interfaces/product";
 import { Navbar } from "../../components/navbar";
 import { Footer } from "../../components/footer";
-import { BackButton } from "../../components/backButton";
+import { BackButton } from "../../components/back-button";
 import { NameInput } from "../../components/forms/product-register/name-input";
 import { PriceInput } from "../../components/forms/product-register/price-input";
 import { UploadInput } from "../../components/forms/product-register/upload-input";
+import { TextInput } from "../../components/forms/product-register/text-input";
+import { IngredientItem } from "../../components/ingredient-item";
+import { toast } from "react-toastify";
 
 const ingredientSchema = z.object({
   name: z.string().min(1, "O nome do ingrediente é obrigatório"),
@@ -40,7 +48,7 @@ const productCreateSchema = z.object({
     .refine((file) => {
       return ACCEPTED_IMAGE_TYPES.includes(file.type);
     }, "Insira uma imagem válida .png .jpg .jpeg .webp"),
-  ingredients: z.array(ingredientSchema).min(1, "Descreva o ingrediente"),
+  ingredients: z.array(ingredientSchema),
 });
 
 type CreateProductSchema = z.infer<typeof productCreateSchema>;
@@ -49,12 +57,40 @@ export const ProductCreate: React.FC<any> = () => {
   const {
     register,
     handleSubmit,
-    //reset,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm<CreateProductSchema>({
     resolver: zodResolver(productCreateSchema),
+    defaultValues: {
+      ingredients: [],
+    },
   });
   const navigate = useNavigate();
+  const [newIngredient, setNewIngredient] = useState<string>("");
+
+  function handleAddIngredient() {
+    const ingredients = getValues("ingredients");
+    if (ingredients.some((ingredient) => ingredient.name === newIngredient)) {
+      toast.warning(`Ingrediente ${newIngredient} já registrado`);
+      return;
+    }
+    if (newIngredient) {
+      setValue(
+        "ingredients",
+        [...ingredients, { name: newIngredient.trim() }],
+        { shouldValidate: true }
+      );
+      setNewIngredient("");
+    }
+  }
+  function handleRemoveIngredient(ingredientToDelete: string) {
+    const ingredients = getValues("ingredients");
+    const filteredIngredients = ingredients.filter(
+      (ingredient) => ingredient.name !== ingredientToDelete
+    );
+    setValue("ingredients", filteredIngredients, { shouldValidate: true });
+  }
 
   const createProduct = async (data: ProductRegisterData): Promise<void> => {
     const formData = new FormData();
@@ -96,12 +132,40 @@ export const ProductCreate: React.FC<any> = () => {
             error={errors.name}
             registerOptions={{ required: true }}
           />
+          <IngredientContainer>
+            {getValues("ingredients") &&
+              getValues("ingredients").map((ingredient, index) => {
+                return (
+                  <IngredientItem
+                    isnew={false}
+                    key={index}
+                    value={ingredient.name}
+                    onClick={() => handleRemoveIngredient(ingredient.name)}
+                  />
+                );
+              })}
+            <IngredientItem
+              isnew
+              value={newIngredient}
+              placeholder="Adicionar"
+              onChange={(e) => setNewIngredient(e.target.value)}
+              onClick={handleAddIngredient}
+            />
+          </IngredientContainer>
           <PriceInput
             label="Preço"
             name="price"
             placeholder="R$ 00,00"
             register={register}
             error={errors.price}
+            registerOptions={{ required: true }}
+          />
+          <TextInput
+            label="Descrição"
+            name="description"
+            placeholder="Insira a descrição sobre o prato aqui"
+            register={register}
+            error={errors.description}
             registerOptions={{ required: true }}
           />
           <CreateNewDishButton

@@ -1,5 +1,5 @@
 import React from "react";
-import { InputContainer, TextInputElement } from "./styles";
+import { InputContainer, StringInputElement } from "./styles";
 import { useMask } from "@react-input/mask";
 
 export const PriceInput: React.FC<FormSimpleTextProps> = ({
@@ -17,7 +17,7 @@ export const PriceInput: React.FC<FormSimpleTextProps> = ({
       <label className="text-light-400 roboto small-regular" htmlFor={name}>
         {label}
       </label>
-      <TextInputElement
+      <StringInputElement
         className={"text-light-100 small-regular bg-dark-900"}
         id={name}
         type={"number"}
