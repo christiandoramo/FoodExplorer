@@ -21,3 +21,8 @@ export function formatToBRL(value: number): string {
   // Retornar no formato "R$ X,XX"
   return `R$ ${integerPart},${decimalPart}`;
 }
+
+export function formatToAmount(value: number): string {
+  if (value >= 10) return value.toString();
+  return `0${value.toString()}`;
+}
