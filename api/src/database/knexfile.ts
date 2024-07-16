@@ -25,8 +25,6 @@ export const config: { [key: string]: Knex.Config } = {
     },
     useNullAsDefault: true,
   },
-
-  // Outros ambientes como staging e production podem ser configurados aqui
 };
 
 module.exports = config;

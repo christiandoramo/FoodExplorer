@@ -14,7 +14,6 @@ export class UsersRepository {
     const [result] = await db("users")
       .insert({ email, name, password })
       .returning(["id"]);
-    await db("carts").insert({ user_id: result.id }); // usuario inicia ja com um carrinho vazio
     return result.id;
   }
   async findByEmail(email: string) {
