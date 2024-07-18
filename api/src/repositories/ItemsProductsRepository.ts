@@ -5,6 +5,7 @@ import { ProductsRepository } from "./ProductsRepository";
 
 export class ItemsProductsRepository {
   async create(itemProductCreateBodySchema: ItemProductCreateBodySchema[]) {
+    let orderAmount = 0;
     if (itemProductCreateBodySchema.length > 1) {
       const productsRepository = new ProductsRepository();
       const trx = await db.transaction();
@@ -20,13 +21,14 @@ export class ItemsProductsRepository {
             );
           }
           const amount = quantity * productWithItem.price;
+          orderAmount += amount;
           const [result] = await trx("items_products")
             .insert({ product_id, order_id, amount, quantity })
             .returning("id");
           insertedIds.push(result.id);
         }
         await trx.commit();
-        return insertedIds;
+        return { insertedIds: insertedIds, orderAmount: orderAmount };
       } catch (error) {
         // Em caso de erro, fazer rollback da transação
         await trx.rollback();
@@ -38,10 +40,11 @@ export class ItemsProductsRepository {
       const productWithItem = await productsRepository.findById(product_id);
       if (!productWithItem) return;
       const amount = quantity * productWithItem.price;
+      orderAmount += amount;
       const [result] = await db("items_products")
         .insert({ product_id, order_id, amount, quantity })
         .returning("id");
-      return result.id;
+      return { insertedIds: result.id, orderAmount: orderAmount };
     }
   }
 

@@ -7,6 +7,5 @@ export interface OrderCreateSchema {
     product_id: string;
     quantity: number;
   }[];
-  amount: number;
   method: PAYMENT_METHOD;
 }
