@@ -1,5 +1,4 @@
 import { db } from "../database";
-import crypto from "crypto";
 
 export class UsersRepository {
   async create({

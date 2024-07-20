@@ -1,10 +1,7 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-import { USER_ROLES } from "./../../enums/users";
+import { USER_ROLES } from "../../enums/users";
+import type { Knex } from "knex";
 
-exports.up = async function (knex) {
+export async function up(knex: Knex): Promise<void> {
   return await knex.schema.createTable("users", (table) => {
     table.uuid("id", { primaryKey: true }).defaultTo(knex.fn.uuid());
     table.text("name").notNullable();
@@ -19,12 +16,7 @@ exports.up = async function (knex) {
     table.timestamp("created_at").defaultTo(knex.raw("CURRENT_TIMESTAMP(0)"));
     table.timestamp("updated_at").defaultTo(knex.raw("CURRENT_TIMESTAMP(0)"));
   });
-};
-
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function (knex) {
+}
+export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTable("users");
-};
+}

@@ -1,6 +1,6 @@
-// PARA RODAR NOVAS MIGRATION DEVE RODAR O ESSE ARQUIVO BUSCANDO O PATH COMPLETO
-
 import type { Knex } from "knex";
+//require("dotenv/config");
+
 import * as path from "path";
 import dotenv from "dotenv";
 

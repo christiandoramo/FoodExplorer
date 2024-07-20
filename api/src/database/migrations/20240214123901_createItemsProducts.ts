@@ -1,8 +1,6 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = function (knex) {
+import type { Knex } from "knex";
+
+export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("items_products", (table) => {
     table.uuid("id", { primaryKey: true }).defaultTo(knex.fn.uuid());
     table
@@ -21,12 +19,8 @@ exports.up = function (knex) {
     table.integer("quantity").notNullable();
     table.timestamp("add_date").defaultTo(knex.raw("CURRENT_TIMESTAMP(0)"));
   });
-};
+}
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function (knex) {
+export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTable("items_products");
-};
+}

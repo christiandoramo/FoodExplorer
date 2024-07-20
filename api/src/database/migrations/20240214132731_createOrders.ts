@@ -1,8 +1,6 @@
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = function (knex) {
+import type { Knex } from "knex";
+
+export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("orders", (table) => {
     table.uuid("id", { primaryKey: true }).defaultTo(knex.fn.uuid());
     table
@@ -30,12 +28,8 @@ exports.up = function (knex) {
       .defaultTo("Pendente")
       .notNullable();
   });
-};
+}
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function (knex) {
+export async function down(knex: Knex): Promise<void> {
   return knex.schema.dropTable("orders");
-};
+}
