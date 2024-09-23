@@ -15,6 +15,9 @@ export const Image = styled.img`
   position: absolute;
   bottom: 0;
   left: -50px;
-  height: 320px;
+  height: 240px;
   background-size: cover;
+  //   @media (max-height: 768px) {
+  //   width: 100%;
+  // }
 `;

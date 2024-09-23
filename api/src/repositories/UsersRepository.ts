@@ -1,3 +1,4 @@
+import { USER_ROLES } from "../enums/users";
 import { db } from "../database";
 
 export class UsersRepository {
@@ -5,13 +6,16 @@ export class UsersRepository {
     email,
     name,
     password,
+    role,
   }: {
     email: string;
     name: string;
     password: string;
+    role?: USER_ROLES;
   }) {
+    console.log("role ?? USER_ROLES.DEFAULT: ", role ?? USER_ROLES.DEFAULT);
     const [result] = await db("users")
-      .insert({ email, name, password })
+      .insert({ email, name, password, role: role ?? USER_ROLES.DEFAULT })
       .returning(["id"]);
     return result.id;
   }

@@ -9,7 +9,7 @@ import { Skeleton } from "@mui/material";
 export const Categories: React.FC<any> = () => {
   const [products, setProducts] = useState<Product[][]>([]);
   const { user } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   const matrixPlaceholder: Number[][] = [
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -30,7 +30,7 @@ export const Categories: React.FC<any> = () => {
       if (response) {
         setProducts(response);
         setTimeout(() => {
-          setLoading(false);
+          setIsLoading(false);
         }, 1000);
       }
     }
@@ -39,7 +39,7 @@ export const Categories: React.FC<any> = () => {
 
   return (
     <Container>
-      {loading ? (
+      {isLoading ? (
         <>
           {matrixPlaceholder.map((arrayOfMatrixPlaceholder) => (
             <>
@@ -51,6 +51,7 @@ export const Categories: React.FC<any> = () => {
           ))}
         </>
       ) : (
+        products?.length > 0 &&
         products.map((productsByCategory, index) => (
           <Row
             key={index}

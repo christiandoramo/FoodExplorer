@@ -29,7 +29,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async ({ email, password }: UserLoginData) => {
     const response = await sessionService.login({ email, password });
-    if (response) {
+    if (!!response) {
       localStorage.setItem(
         "@food_explorer/session_token",
         JSON.stringify(response.data.session_token)
@@ -71,12 +71,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (foundUser) {
         setUser(foundUser);
-        navigate("/home");
+        navigate("/");
       }
     } else {
-      // toast.error(
-      //   `Ocorreu um erro: ${response?.message || response?.response?.message}`
-      // );
+      toast.error(
+        `Ocorreu um erro: ${response?.message || response?.response?.message}`
+      );
     }
   };
 
@@ -88,7 +88,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       removeCookie("@food_explorer/user_id", { path: "/" });
       localStorage.removeItem("@food_explorer/session_token");
       setUser({ email: "", id: "", name: "", role: "" });
-      navigate("/login");
+      navigate("/");
     }
   };
 

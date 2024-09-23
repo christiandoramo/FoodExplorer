@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-//require("dotenv/config");
+require("dotenv/config");
 
 import * as path from "path";
 import dotenv from "dotenv";
@@ -26,5 +26,3 @@ export const config: { [key: string]: Knex.Config } = {
     useNullAsDefault: true,
   },
 };
-
-module.exports = config;

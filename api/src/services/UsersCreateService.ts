@@ -1,3 +1,4 @@
+import { USER_ROLES } from "../enums/users";
 import { UsersRepository } from "../repositories/UsersRepository";
 import AppError from "../utils/AppError";
 const { hash } = require("bcryptjs");
@@ -25,10 +26,12 @@ export class UsersCreateService {
     email,
     name,
     password,
+    role,
   }: {
     email: string;
     name: string;
     password: string;
+    role?: USER_ROLES;
   }) {
     try {
       createUserSchema.parse({ name, email, password });
@@ -41,10 +44,12 @@ export class UsersCreateService {
       const user = await this.usersRepository.findByEmail(email);
       if (user) throw new AppError("Email indisponível", 400);
       const hashedPassword: string = await hash(password, 8);
+      console.log("role: ", role);
       const userId = await this.usersRepository.create({
         name,
         email,
         password: hashedPassword,
+        role,
       });
       const newUser = await this.usersRepository.findById(userId);
       delete newUser.password;

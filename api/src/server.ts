@@ -6,7 +6,9 @@ import { NextFunction, Request, Response } from "express";
 import AppError from "./utils/AppError";
 import { routes } from "./routes";
 const cookieParser = require("cookie-parser");
+import { connection } from "./database";
 
+connection();
 const app = express();
 app.use(cookieParser());
 
@@ -14,6 +16,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3001",
   "http://localhost:3000",
+  "https://fudexplorer.netlify.app",
 ];
 
 app.use(

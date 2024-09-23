@@ -30,7 +30,9 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const productCreateSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório"),
-  category: z.nativeEnum(PRODUCT_CATEGORY),
+  category: z.nativeEnum(PRODUCT_CATEGORY, {
+    errorMap: () => ({ message: "Categoria inválida" }),
+  }),
   description: z.string().min(1, "Insira alguma descrição"),
   price: z.number().positive("O preço deve ser um número positivo"),
   file: z.object({
