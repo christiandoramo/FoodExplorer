@@ -44,7 +44,6 @@ export class UsersCreateService {
       const user = await this.usersRepository.findByEmail(email);
       if (user) throw new AppError("Email indisponível", 400);
       const hashedPassword: string = await hash(password, 8);
-      console.log("role: ", role);
       const userId = await this.usersRepository.create({
         name,
         email,

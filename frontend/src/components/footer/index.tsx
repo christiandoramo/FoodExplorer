@@ -6,9 +6,9 @@ export const Footer: React.FC<any> = () => {
     <Container className="bg-dark-600">
       <div className="logo-text">
         {/* <div className="roboto bigger-bold text-light-100">food explorer</div> */}
-        <div className="roboto smallest-regular text-tints-cake-200 admin">
+        <p className="roboto smallest-regular text-tints-cake-200 admin">
           &copy; Desenvolvido por Christian Oliveira
-        </div>
+        </p>
       </div>
     </Container>
   );

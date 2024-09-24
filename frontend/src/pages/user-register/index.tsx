@@ -78,9 +78,7 @@ export const UserRegister: React.FC<any> = () => {
 
   const onSubmit = (data: RegisterUserSchema, role: USER_ROLES) => {
     // Adiciona a role ao objeto de dados
-    console.log("role: ", role);
     const userDataWithRole = { ...data, role };
-    console.log("userDataWithRole: ", userDataWithRole);
 
     registerUser(userDataWithRole);
   };

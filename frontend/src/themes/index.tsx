@@ -101,7 +101,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .bg-home {
-    background-color: #1E1E1E;
+    background-color: #192227;
   }
 
   .bg-light-100 {
@@ -147,7 +147,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .bg-dark-700 {
-    background-color: rgba(0,17,25,1);
+    background-color: #001119;
   }
 
   .bg-dark-800 {

@@ -28,7 +28,6 @@ export class ProductsSearchService {
     offset?: number;
     slug?: string;
   }) {
-    console.log("entrou aqui");
     const schema = z.object({
       limit: z.number().optional(),
       offset: z.number().optional(),

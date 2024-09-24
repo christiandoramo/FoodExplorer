@@ -6,9 +6,17 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 10px;
+
   @media (max-width: 768px) {
     flex-direction: column;
     justify-content: center;
+  }
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    flex-direction: column;
+    justify-content: center;
+    height: auto;
   }
 `;
 export const RegisterContainer = styled.div`
@@ -21,6 +29,7 @@ export const RegisterContainer = styled.div`
   align-items: center;
   gap: 16px;
   flex-direction: column;
+
   h1 {
     text-align: center;
     padding: 0 32px;
@@ -39,8 +48,22 @@ export const RegisterContainer = styled.div`
     margin: 0;
     padding: 0 50px;
     width: 100%;
-    gap: 40px;
+    gap: 32px;
     border: none;
+  }
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    width: 80%;
+    height: auto;
+    margin-right: 0;
+    padding: 0;
+  }
+
+  @media (max-height: 500px) and (orientation: landscape) {
+    width: 90%;
+    height: auto;
+    margin-right: 0;
+    padding: 0;
   }
 `;
 export const LogoContainer = styled.div`
@@ -51,6 +74,14 @@ export const LogoContainer = styled.div`
     align-items: center;
     width: 100%;
     margin: 0;
+  }
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin-left: 0;
+    margin-bottom: 20px; /* Adiciona espaço entre o logo e o campo de login */
   }
 `;
 export const RegisterAccountButton = styled.button`
@@ -67,5 +98,13 @@ export const RegisterAccountButton = styled.button`
     align-items: center;
     width: 100%;
     margin: 0;
+  }
+
+  @media (max-width: 1024px) and (orientation: landscape) {
+    width: 80%;
+  }
+
+  @media (max-height: 500px) and (orientation: landscape) {
+    width: 90%;
   }
 `;
