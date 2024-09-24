@@ -57,7 +57,7 @@ export const SearchInput = styled.input<{ expanded: boolean }>`
   text-align: left;
 `;
 
-export const NewDishButton = styled.button`
+export const OrdersButton = styled.button`
   height: 48px;
   width: 216px;
   border: none;

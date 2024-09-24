@@ -1,3 +1,4 @@
+import { USER_ROLES } from "../enums/users";
 import { UsersRepository } from "../repositories/UsersRepository";
 import AppError from "../utils/AppError";
 const { hash } = require("bcryptjs");
@@ -25,10 +26,12 @@ export class UsersCreateService {
     email,
     name,
     password,
+    role,
   }: {
     email: string;
     name: string;
     password: string;
+    role?: USER_ROLES;
   }) {
     try {
       createUserSchema.parse({ name, email, password });
@@ -45,6 +48,7 @@ export class UsersCreateService {
         name,
         email,
         password: hashedPassword,
+        role,
       });
       const newUser = await this.usersRepository.findById(userId);
       delete newUser.password;

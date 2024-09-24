@@ -1,21 +1,21 @@
-// Update with your config settings.
-
-/**
- * @type { Object.<string, import("knex").Knex.Config> }
- */
+import type { Knex } from "knex";
 require("dotenv/config");
 
-import path from "path";
+import * as path from "path";
+import dotenv from "dotenv";
 
-export const config = {
+const envPath = path.resolve(__dirname, "..", "..", ".env");
+dotenv.config({ path: envPath });
+
+export const config: { [key: string]: Knex.Config } = {
   development: {
     client: "pg",
     connection: {
-      host: "localhost",
+      host: process.env.HOST,
       user: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      port: 5432,
+      port: Number(process.env.POSTGRES_PORT) || 5432,
     },
     seeds: {
       directory: "./seeds",

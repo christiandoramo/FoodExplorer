@@ -12,10 +12,15 @@ interface ExtendedRequest extends Request {
 
 export class UsersController {
   async create(request: Request, response: Response) {
-    const { name, email, password } = request.body;
+    const { name, email, password, role } = request.body;
     const usersRepository = new UsersRepository();
     const usersCreateService = new UsersCreateService(usersRepository);
-    const newUser = await usersCreateService.execute({ name, email, password });
+    const newUser = await usersCreateService.execute({
+      name,
+      email,
+      password,
+      role,
+    });
     return response.status(201).json(newUser);
   }
   async show(request: ExtendedRequest, response: Response) {

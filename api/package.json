@@ -8,8 +8,7 @@
     "build": "tsc --build --clean && tsc --build",
     "dev": "nodemon ./src/server.ts",
     "start": "npm run build && node ./dist/js/server.js",
-    "migrate": "npx knex migrate:latest",
-    "rollback": "npx knex migrate:rollback --all"
+    "migrate:deploy":"npx knex --knexfile=./src/database/knexfile.ts migrate:latest"
   },
   "repository": {
     "type": "git",

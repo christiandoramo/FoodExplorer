@@ -13,6 +13,8 @@ import {
 import { Logo } from "../../components/logo";
 import { userService } from "../../services/users";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/auth";
+import { USER_ROLES } from "../../enums/users";
 
 const registerUserSchema = z.object({
   name: z.string(),
@@ -23,6 +25,13 @@ const registerUserSchema = z.object({
   //   .min(5, "Pelo menos 5 caracteres")
   //   .regex(/[A-Z]/, "Pelo menos uma letra maiúscula")
   //   .regex(/[0-9]/, "Pelo menos um número"),
+  role: z
+    .nativeEnum(USER_ROLES, {
+      errorMap: () => ({
+        message: "Usuário sem role definida.",
+      }),
+    })
+    .optional(),
 });
 
 type RegisterUserSchema = z.infer<typeof registerUserSchema>;
@@ -42,14 +51,36 @@ export const UserRegister: React.FC<any> = () => {
     const registerResponse = await userService.registerUser(data);
     if (registerResponse) {
       if (registerResponse.status === 200 || registerResponse.status === 201) {
-        navigate("/login");
+        const loginData: LoginUserSchema = {
+          email: data.email,
+          password: data.password,
+        };
+        await login(loginData);
       }
     }
   };
 
+  const loginSchema = z.object({
+    email: z.string().email("Insira um email válido"),
+    password: z.string().min(1, "A senha está vazia"),
+  });
+  type LoginUserSchema = z.infer<typeof loginSchema>;
+  const { signIn } = useAuth();
+
+  const login = async (data: LoginUserSchema) => {
+    await signIn(data);
+  };
+
   const haveAnAccount = () => {
     //reset();
-    navigate("/login");
+    navigate("/");
+  };
+
+  const onSubmit = (data: RegisterUserSchema, role: USER_ROLES) => {
+    // Adiciona a role ao objeto de dados
+    const userDataWithRole = { ...data, role };
+
+    registerUser(userDataWithRole);
   };
 
   return (
@@ -86,9 +117,18 @@ export const UserRegister: React.FC<any> = () => {
           />
           <RegisterAccountButton
             className="bg-tints-tomato-100 text-light-100"
-            type="submit"
+            type="button"
+            onClick={handleSubmit((data) => onSubmit(data, USER_ROLES.DEFAULT))}
           >
             Criar conta
+          </RegisterAccountButton>
+          {/* Botão para registrar conta com role ADMIN */}
+          <RegisterAccountButton
+            className="bg-tints-tomato-100 text-light-100"
+            type="button"
+            onClick={handleSubmit((data) => onSubmit(data, USER_ROLES.ADMIN))}
+          >
+            Criar conta ADMIN
           </RegisterAccountButton>
           <p onClick={haveAnAccount} className="medium-100 text-light-100">
             Já tenho uma conta

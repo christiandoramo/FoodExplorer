@@ -100,6 +100,10 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: bold;
   }
 
+  .bg-home {
+    background-color: #192227;
+  }
+
   .bg-light-100 {
     background-color: rgba(255, 255, 255, 1);
   }
@@ -143,7 +147,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .bg-dark-700 {
-    background-color: rgba(0,17,25,1);
+    background-color: #001119;
   }
 
   .bg-dark-800 {
@@ -161,8 +165,9 @@ export const GlobalStyle = createGlobalStyle`
     background: linear-gradient(to right, rgba(13,22,27,1), rgba(77,88,94,1));
   }
   .bg-gradient-200 {
-    background: linear-gradient(to right, rgba(25,34,39,1), rgba(6,94,124,1));
+    background: linear-gradient(to right, rgba(25,34,39,1), rgba(3,23,31,1));
   }
+
   .bg-tints-tomato-100 {
     background-color: rgba(117,3,16,1);
   }

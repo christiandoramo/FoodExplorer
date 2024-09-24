@@ -1,20 +1,22 @@
+import { USER_ROLES } from "../enums/users";
 import { db } from "../database";
-import crypto from "crypto";
 
 export class UsersRepository {
   async create({
     email,
     name,
     password,
+    role,
   }: {
     email: string;
     name: string;
     password: string;
+    role?: USER_ROLES;
   }) {
+    console.log("role ?? USER_ROLES.DEFAULT: ", role ?? USER_ROLES.DEFAULT);
     const [result] = await db("users")
-      .insert({ email, name, password })
+      .insert({ email, name, password, role: role ?? USER_ROLES.DEFAULT })
       .returning(["id"]);
-    await db("carts").insert({ user_id: result.id }); // usuario inicia ja com um carrinho vazio
     return result.id;
   }
   async findByEmail(email: string) {
