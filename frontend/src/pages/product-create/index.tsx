@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   CreateNewDishButton,
@@ -21,6 +21,7 @@ import { UploadInput } from "../../components/forms/product-register/upload-inpu
 import { TextInput } from "../../components/forms/product-register/text-input";
 import { IngredientItem } from "../../components/ingredient-item";
 import { toast } from "react-toastify";
+import { CategorySelect } from "../../components/forms/product-register/category-select";
 
 const ingredientSchema = z.object({
   name: z.string().min(1, "O nome do ingrediente é obrigatório"),
@@ -37,11 +38,15 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const productCreateSchema = z.object({
   name: z.string().min(2, "O nome é obrigatório"),
-  category: z.nativeEnum(PRODUCT_CATEGORY),
+  category: z.nativeEnum(PRODUCT_CATEGORY, {
+    errorMap: () => {
+      return { message: "Selecione uma categoria" };
+    },
+  }),
   description: z.string().min(1, "Insira alguma descrição"),
   price: z.number().positive("O preço deve ser um número positivo"),
   file: z
-    .instanceof(File)
+    .instanceof(File, "Insira a imagem do produto")
     .refine((file) => {
       return !file || file.size <= MAX_FILE_SIZE;
     }, "O arquivo deve ser menor do que 5MB")
@@ -68,6 +73,7 @@ export const ProductCreate: React.FC<any> = () => {
   });
   const navigate = useNavigate();
   const [newIngredient, setNewIngredient] = useState<string>("");
+  const [categories, setCategories] = useState<string[]>([]);
 
   function handleAddIngredient() {
     const ingredients = getValues("ingredients");
@@ -110,6 +116,14 @@ export const ProductCreate: React.FC<any> = () => {
     }
   };
 
+  useEffect(() => {
+    const getAllCategories = async () => {
+      const foundCategories = await productService.findAllCategories();
+      setCategories(foundCategories);
+    };
+    getAllCategories();
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(createProduct)}>
       <Container className="bg-home">
@@ -132,7 +146,17 @@ export const ProductCreate: React.FC<any> = () => {
             error={errors.name}
             registerOptions={{ required: true }}
           />
+          <CategorySelect
+            name="category"
+            placeholder="Categoria"
+            label="Selecione uma categoria"
+            categories={categories?.length ? categories : []}
+            registerOptions={{ required: true }}
+            error={errors.category}
+            register={register}
+          />
           <IngredientContainer>
+            <p className="text-light-100 small-regular">Ingredientes</p>
             {getValues("ingredients") &&
               getValues("ingredients").map((ingredient, index) => {
                 return (

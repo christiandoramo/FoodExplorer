@@ -111,6 +111,16 @@ class ProductService {
       return error?.response?.message || error;
     }
   }
+
+  async findAllCategories(): Promise<any> {
+    try {
+      const response = await api.get(`/products/categories`);
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+      return error?.response?.message || error;
+    }
+  }
 }
 
 export const productService = new ProductService();

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   width: 100dvw;
-  height: 100dvh;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,16 +38,6 @@ export const CreateContainer = styled.div`
   }
 `;
 
-export const LogoContainer = styled.div`
-  margin-left: 154px;
-  @media (max-width: 768px) {
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin: 0;
-  }
-`;
 export const CreateNewDishButton = styled.button`
   width: 285px;
   height: 48px;
