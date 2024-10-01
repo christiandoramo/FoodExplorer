@@ -46,7 +46,7 @@ const productCreateSchema = z.object({
   description: z.string().min(1, "Insira alguma descrição"),
   price: z.number().positive("O preço deve ser um número positivo"),
   file: z
-    .instanceof(File, "Insira a imagem do produto")
+    .instanceof(File, { message: "Insira a imagem do produto" }) //+conversationId":"fac3d0e0-08e8-4d2f-8817-07e45a0bf925","source":"instruct"}
     .refine((file) => {
       return !file || file.size <= MAX_FILE_SIZE;
     }, "O arquivo deve ser menor do que 5MB")
