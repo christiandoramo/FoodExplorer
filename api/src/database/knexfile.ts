@@ -6,6 +6,8 @@ import { Knex } from "knex";
 const envPath = path.resolve(__dirname, "..", "..", ".env");
 dotenv.config({ path: envPath });
 
+console.log("knex rodando em: ", process.env.NODE_ENV);
+
 export const config: { [key: string]: Knex.Config } = {
   development: {
     client: "pg",
@@ -15,6 +17,7 @@ export const config: { [key: string]: Knex.Config } = {
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       port: Number(process.env.POSTGRES_PORT) || 5432,
+      ssl: { rejectUnauthorized: false }, // Importante para deploys no Render
     },
     seeds: {
       directory: "./seeds",
