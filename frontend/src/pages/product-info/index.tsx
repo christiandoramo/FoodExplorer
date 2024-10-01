@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Container,
   InfoContainer,
@@ -6,7 +6,7 @@ import {
   ProductImage,
   ProductInfoContainer,
 } from "./styles";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import { Navbar } from "../../components/navbar";
 import { Footer } from "../../components/footer";
 import { BackButton } from "../../components/back-button";
@@ -15,8 +15,9 @@ import { USER_ROLES } from "../../enums/users";
 import { formatToAmount } from "../../utils/strings";
 
 export const ProductInfo: React.FC<any> = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const { user } = useAuth();
+  const productAmount = 0;
 
   return (
     <Container className="bg-home">
