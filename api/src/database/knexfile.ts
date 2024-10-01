@@ -1,8 +1,7 @@
-import type { Knex } from "knex";
 require("dotenv/config");
-
 import * as path from "path";
 import dotenv from "dotenv";
+import { Knex } from "knex";
 
 const envPath = path.resolve(__dirname, "..", "..", ".env");
 dotenv.config({ path: envPath });
@@ -40,3 +39,5 @@ export const config: { [key: string]: Knex.Config } = {
     useNullAsDefault: true,
   },
 };
+
+export default config;
