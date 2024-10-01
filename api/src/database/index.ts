@@ -1,7 +1,18 @@
 import knex from "knex";
 import { config } from "./knexfile";
 
-const db = knex(config.development);
+require("dotenv/config");
+
+import * as path from "path";
+import dotenv from "dotenv";
+
+const envPath = path.resolve(__dirname, "..", "..", ".env");
+dotenv.config({ path: envPath });
+
+const NODE_ENV = process.env.NODE_ENV;
+const knexEnv =
+  NODE_ENV === "production" ? config.production : config.development;
+const db = knex(knexEnv);
 
 function connection() {
   db.raw("SELECT 1") // Teste simples de conexão

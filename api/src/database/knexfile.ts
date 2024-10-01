@@ -25,4 +25,18 @@ export const config: { [key: string]: Knex.Config } = {
     },
     useNullAsDefault: true,
   },
+  production: {
+    client: "pg",
+    connection: {
+      connectionString: process.env.DATABASE_URL_PROD,
+      ssl: { rejectUnauthorized: false }, // Importante para deploys no Render
+    },
+    seeds: {
+      directory: "./seeds",
+    },
+    migrations: {
+      directory: "./migrations",
+    },
+    useNullAsDefault: true,
+  },
 };
