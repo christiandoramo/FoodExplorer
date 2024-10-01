@@ -3,9 +3,7 @@ import { ProductsCreateService } from "../services/ProductsCreateService";
 import { ProductsSearchService } from "../services/ProductsSearchService";
 import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsDeleteService } from "../services/ProductsDeleteService";
-import AppError from "../utils/AppError";
-import { z } from "zod";
-import { PRODUCT_CATEGORY } from "../enums/category";
+import { ProductsCategoriesSearch } from "../services/ProductsCategoriesSearch";
 
 interface ProductRequest extends Request {
   file?: Express.Multer.File;
@@ -83,5 +81,13 @@ export class ProductsController {
     const productsDeleteService = new ProductsDeleteService(productsRepository);
     await productsDeleteService.execute(id);
     return response.status(200).json("Produto deletado com sucesso");
+  }
+  findAllCategories(req: Request, res: Response) {
+    const productsRepository = new ProductsRepository();
+    const productsCategoriesSearch = new ProductsCategoriesSearch(
+      productsRepository
+    );
+    const categories = productsCategoriesSearch.execute();
+    return res.status(200).json(categories);
   }
 }

@@ -17,11 +17,13 @@ import { Logo } from "../logo";
 import { useAuth } from "../../contexts/auth";
 import { List, Receipt, X } from "@phosphor-icons/react";
 import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar: React.FC<any> = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const nav = useNavigate();
 
   const isMobile = useMediaQuery({
     query: "(max-width: 768px), (pointer: coarse)",
@@ -46,7 +48,7 @@ export const Navbar: React.FC<any> = () => {
     // usuario comum vê seus favoritos
   };
   const handleGotoNewDish = () => {
-    // admin novo produto (exclusivo do admin)
+    nav("/product-create");
   };
 
   const toggleMenu = () => {

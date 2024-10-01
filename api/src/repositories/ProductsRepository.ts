@@ -314,4 +314,9 @@ export class ProductsRepository {
       ingredients: ingredients,
     };
   }
+
+  findAllCategories(): any {
+    const categories = Object.values(PRODUCT_CATEGORY);
+    return categories;
+  }
 }

@@ -19,7 +19,9 @@ productsRoutes.delete(
   ensureAuthorization,
   productsController.delete
 );
+productsRoutes.get("/categories", productsController.findAllCategories);
 productsRoutes.get("/show/:id", productsController.show);
 productsRoutes.get("/search", productsController.search); // traz com filtros ou todos
 productsRoutes.get("/index", productsController.index); // traz produtos categorizado
+
 export { productsRoutes };
