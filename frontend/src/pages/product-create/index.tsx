@@ -3,7 +3,8 @@ import {
   Container,
   CreateNewDishButton,
   CreateContainer,
-  IngredientContainer,
+  // IngredientContainer,
+  PageLabelContainer,
 } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,12 +19,13 @@ import { BackButton } from "../../components/back-button";
 import { NameInput } from "../../components/forms/product-register/name-input";
 import { PriceInput } from "../../components/forms/product-register/price-input";
 import { UploadInput } from "../../components/forms/product-register/upload-input";
-import { TextInput } from "../../components/forms/product-register/text-input";
-import { IngredientItem } from "../../components/ingredient-item";
-import { toast } from "react-toastify";
+// import { IngredientItem } from "../../components/ingredient-item";
+// import { toast } from "react-toastify";
 import { CategorySelect } from "../../components/forms/product-register/category-select";
+import { TextAreaInput } from "../../components/forms/product-register/text-area";
+import { IngredientsInput } from "../../components/forms/product-register/ingredients-input";
 
-const ingredientSchema = z.object({
+export const ingredientSchema = z.object({
   name: z.string().min(1, "O nome do ingrediente é obrigatório"),
   amount: z.number().optional(),
 });
@@ -72,31 +74,41 @@ export const ProductCreate: React.FC<any> = () => {
     },
   });
   const navigate = useNavigate();
-  const [newIngredient, setNewIngredient] = useState<string>("");
+  // const [newIngredient, setNewIngredient] = useState<string>("");
   const [categories, setCategories] = useState<string[]>([]);
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // Estado para armazenar a imagem
 
-  function handleAddIngredient() {
-    const ingredients = getValues("ingredients");
-    if (ingredients.some((ingredient) => ingredient.name === newIngredient)) {
-      toast.warning(`Ingrediente ${newIngredient} já registrado`);
-      return;
-    }
-    if (newIngredient) {
-      setValue(
-        "ingredients",
-        [...ingredients, { name: newIngredient.trim() }],
-        { shouldValidate: true }
-      );
-      setNewIngredient("");
+  function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setValue("file", file); // Definir o arquivo no formulário
+      const fileURL = URL.createObjectURL(file); // Criar URL temporária da imagem
+      setImagePreview(fileURL); // Atualizar o estado com a URL da imagem
     }
   }
-  function handleRemoveIngredient(ingredientToDelete: string) {
-    const ingredients = getValues("ingredients");
-    const filteredIngredients = ingredients.filter(
-      (ingredient) => ingredient.name !== ingredientToDelete
-    );
-    setValue("ingredients", filteredIngredients, { shouldValidate: true });
-  }
+
+  // function handleAddIngredient() {
+  //   const ingredients = getValues("ingredients");
+  //   if (ingredients.some((ingredient) => ingredient.name === newIngredient)) {
+  //     toast.warning(`Ingrediente ${newIngredient} já registrado`);
+  //     return;
+  //   }
+  //   if (newIngredient) {
+  //     setValue(
+  //       "ingredients",
+  //       [...ingredients, { name: newIngredient.trim() }],
+  //       { shouldValidate: true }
+  //     );
+  //     setNewIngredient("");
+  //   }
+  // }
+  // function handleRemoveIngredient(ingredientToDelete: string) {
+  //   const ingredients = getValues("ingredients");
+  //   const filteredIngredients = ingredients.filter(
+  //     (ingredient) => ingredient.name !== ingredientToDelete
+  //   );
+  //   setValue("ingredients", filteredIngredients, { shouldValidate: true });
+  // }
 
   const createProduct = async (data: ProductRegisterData): Promise<void> => {
     const formData = new FormData();
@@ -126,17 +138,23 @@ export const ProductCreate: React.FC<any> = () => {
 
   return (
     <form onSubmit={handleSubmit(createProduct)}>
-      <Container className="bg-home">
+      <Container className="bg-dark-400">
         <Navbar />
-        <CreateContainer>
+        <PageLabelContainer>
           <BackButton />
           <h1 className="text-light-100 medium-400">Adicionar prato</h1>
+        </PageLabelContainer>
+        <CreateContainer>
+          <div>
+            <img src={imagePreview || "./dishes.gif"} alt="Pré-visualização" />
+          </div>
           <UploadInput
             label="Imagem do prato"
             name="file"
             register={register}
             error={errors.file}
             registerOptions={{ required: true }}
+            onChange={handleImageUpload}
           />
           <NameInput
             label="Nome"
@@ -148,14 +166,23 @@ export const ProductCreate: React.FC<any> = () => {
           />
           <CategorySelect
             name="category"
-            placeholder="Categoria"
-            label="Selecione uma categoria"
+            placeholder="Selecione uma categoria"
+            label="Categoria"
             categories={categories?.length ? categories : []}
             registerOptions={{ required: true }}
             error={errors.category}
             register={register}
           />
-          <IngredientContainer>
+          <IngredientsInput
+            label="Ingredientes"
+            name="ingredients"
+            register={register}
+            error={errors.ingredients}
+            registerOptions={{ required: true }}
+            getValues={getValues}
+            setValue={setValue}
+          />
+          {/* <IngredientContainer className="bg-dark-900">
             <p className="text-light-100 small-regular">Ingredientes</p>
             {getValues("ingredients") &&
               getValues("ingredients").map((ingredient, index) => {
@@ -175,7 +202,7 @@ export const ProductCreate: React.FC<any> = () => {
               onChange={(e) => setNewIngredient(e.target.value)}
               onClick={handleAddIngredient}
             />
-          </IngredientContainer>
+          </IngredientContainer> */}
           <PriceInput
             label="Preço"
             name="price"
@@ -184,7 +211,7 @@ export const ProductCreate: React.FC<any> = () => {
             error={errors.price}
             registerOptions={{ required: true }}
           />
-          <TextInput
+          <TextAreaInput
             label="Descrição"
             name="description"
             placeholder="Insira a descrição sobre o prato aqui"

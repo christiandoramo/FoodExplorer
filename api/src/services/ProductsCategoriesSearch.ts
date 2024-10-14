@@ -2,12 +2,12 @@ import { ProductsRepository } from "../repositories/ProductsRepository";
 import AppError from "../utils/AppError";
 import DiskStorage from "../providers/DiskStorage";
 
-export class ProductsCategoriesSearch {
+export class ProductsCategoriesSearchService {
   productsRepository;
   constructor(productsRepository: ProductsRepository) {
     this.productsRepository = productsRepository;
   }
-  execute() {
-    this.productsRepository.findAllCategories();
+  async execute() {
+    return await this.productsRepository.findAllCategories();
   }
 }

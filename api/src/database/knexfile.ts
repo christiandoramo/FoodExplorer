@@ -17,7 +17,9 @@ export const config: { [key: string]: Knex.Config } = {
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       port: Number(process.env.POSTGRES_PORT) || 5432,
-      ssl: { rejectUnauthorized: false }, // Importante para deploys no Render
+      // ssl: {
+      //   rejectUnauthorized: false,
+      // }, // Importante para deploys no Render
     },
     seeds: {
       directory: "./seeds",

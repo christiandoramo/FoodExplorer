@@ -315,7 +315,7 @@ export class ProductsRepository {
     };
   }
 
-  findAllCategories(): any {
+  async findAllCategories() {
     const categories = Object.values(PRODUCT_CATEGORY);
     return categories;
   }

@@ -12,8 +12,8 @@ export const BackButton: React.FC<any> = () => {
 
   return (
     <Container onClick={handleGoBack}>
-      <CaretLeft size={24} />
-      <div>voltar</div>
+      <CaretLeft className="text-light-100" size={24} />
+      <div className="text-light-100">voltar</div>
     </Container>
   );
 };

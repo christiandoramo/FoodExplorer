@@ -25,13 +25,25 @@ export const SelectInputElement = styled.select`
   border-color: rgba(124, 124, 138, 1);
   border-radius: 5px;
   text-align: left;
-  width: 463px;
+  max-width: 463px;
   @media (max-width: 768px) {
     width: 100%;
   }
 `;
 
 export const TextInputElement = styled.input`
+  padding: 12px;
+  border-color: rgba(124, 124, 138, 1);
+  border-radius: 5px;
+  text-align: left;
+  width: 1120px;
+  height: 172px;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
+export const TextAreaInputElement = styled.textarea`
   padding: 12px;
   border-color: rgba(124, 124, 138, 1);
   border-radius: 5px;
@@ -64,4 +76,10 @@ export const UploadInputContainer = styled.div`
     border-color: #fff;
     color: #fff;
   }
+`;
+
+export const IngredientsInputContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 `;

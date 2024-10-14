@@ -9,12 +9,38 @@ export const Container = styled.div`
   flex-direction: column;
 `;
 
+export const PageLabelContainer = styled.div`
+  padding-top: 58px;
+  padding-left: 122px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  h1 {
+    text-align: left;
+    padding: 0 32px;
+  }
+
+  justify-content: flex-start;
+  gap: 20px;
+  align-items: start;
+  @media (max-width: 768px) {
+    background-color: transparent !important;
+    h1 {
+      display: none;
+    }
+    margin: 0;
+    padding: 25px 50px;
+    width: 100%;
+    border: none;
+  }
+`;
 export const CreateContainer = styled.div`
   padding: 116px 122px;
   gap: 32px;
   border-radius: 16px;
-  flex-direction: column;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   h1 {
     text-align: center;
     padding: 0 32px;
@@ -25,16 +51,33 @@ export const CreateContainer = styled.div`
       color: orange;
     }
   }
+  div:nth-child(1) {
+    justify-content: start;
+    align-items: flex-start;
+    display: flex;
+    width: 100%;
+    flex-shrink: 0;
+    img {
+      max-height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  }
   @media (max-width: 768px) {
     background-color: transparent !important;
     h1 {
       display: none;
     }
     margin: 0;
-    padding: 0 50px;
+    padding: 25px 50px;
     width: 100%;
     gap: 40px;
     border: none;
+
+    div:nth-child(1) {
+      justify-content: center;
+      align-items: center;
+    }
   }
 `;
 

@@ -26,7 +26,7 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
         onClick={onClick}
         className={isnew ? "button-add" : "button-delete"}
       >
-        {isnew ? <Plus size={24} /> : <X size={24} />}
+        {isnew ? <Plus size={16} /> : <X size={16} />}
       </button>
     </Container>
   );

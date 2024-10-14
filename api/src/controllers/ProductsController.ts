@@ -3,7 +3,7 @@ import { ProductsCreateService } from "../services/ProductsCreateService";
 import { ProductsSearchService } from "../services/ProductsSearchService";
 import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsDeleteService } from "../services/ProductsDeleteService";
-import { ProductsCategoriesSearch } from "../services/ProductsCategoriesSearch";
+import { ProductsCategoriesSearchService } from "../services/ProductsCategoriesSearch";
 
 interface ProductRequest extends Request {
   file?: Express.Multer.File;
@@ -82,12 +82,12 @@ export class ProductsController {
     await productsDeleteService.execute(id);
     return response.status(200).json("Produto deletado com sucesso");
   }
-  findAllCategories(req: Request, res: Response) {
+  async findAllCategories(req: Request, res: Response) {
     const productsRepository = new ProductsRepository();
-    const productsCategoriesSearch = new ProductsCategoriesSearch(
+    const productsCategoriesSearch = new ProductsCategoriesSearchService(
       productsRepository
     );
-    const categories = productsCategoriesSearch.execute();
+    const categories = await productsCategoriesSearch.execute();
     return res.status(200).json(categories);
   }
 }

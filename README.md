@@ -109,10 +109,12 @@ import { fileURLToPath } from 'url';
 const **filename = fileURLToPath(import.meta.url)
 const **dirname = path.dirname(\_\_filename)
 
+na pasta database:
 npx knex migrate:list - veja migrates nao upadas
 npx knex migrate:down <nome> - para desmontar migrates
 npx knex migrate:up - veja montar as migrates - agora atualizadas
 npx knex migrate:latest - pode atualizar os desmontados
+criar migração: npx knex migrate:make nomedamigração -x ts
 
 inicialmente rodar o banco de dados Postgres com o container docker e instalar npm pg
 criando o app next:

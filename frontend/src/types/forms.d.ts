@@ -10,4 +10,23 @@ export declare global {
     registerOptions?: RegisterOptions;
     placeholder?: string;
   }
+  interface FormUploadProps {
+    label: string;
+    name: string;
+    register: UseFormRegister<any>;
+    error: any;
+    registerOptions?: RegisterOptions;
+    placeholder?: string;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  }
+  interface FormIngredientsProps {
+    label: string;
+    name: string;
+    register: UseFormRegister<any>;
+    error: any;
+    registerOptions?: RegisterOptions;
+    placeholder?: string;
+    getValues: UseFormGetValues<any>;
+    setValue: UseFormSetValue<any>;
+  }
 }

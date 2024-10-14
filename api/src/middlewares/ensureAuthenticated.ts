@@ -37,7 +37,6 @@ export async function ensureAuthenticated(
     // nao está fazendo o uso do axios...
     console.log("entrou aqui: ", error);
     const sessionsRefreshController = new SessionsRefreshController();
-    sessionsRefreshController.create(request, response);
-    return;
+    return await sessionsRefreshController.create(request, response);
   }
 }
