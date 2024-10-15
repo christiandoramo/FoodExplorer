@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { InputContainer, SelectInputElement } from "./styles";
+import { UseFormSetValue } from "react-hook-form";
 
 interface SelectCategoriesProps {
   label: string;
@@ -9,6 +10,7 @@ interface SelectCategoriesProps {
   registerOptions?: any;
   categories: Array<string>;
   placeholder?: string;
+  setValue: UseFormSetValue<any>;
 }
 
 export const CategorySelect: React.FC<SelectCategoriesProps> = ({
@@ -18,8 +20,17 @@ export const CategorySelect: React.FC<SelectCategoriesProps> = ({
   error,
   registerOptions,
   categories,
+  setValue,
   placeholder = "Selecione uma categoria",
 }) => {
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const category = e.target.value;
+    setSelectedCategory(e.target.value);
+    setValue(name, category, { shouldValidate: true });
+  };
+
   return (
     <InputContainer>
       <label className="text-light-400 roboto small-regular" htmlFor={name}>
@@ -30,6 +41,11 @@ export const CategorySelect: React.FC<SelectCategoriesProps> = ({
         id={name}
         {...register(name, registerOptions)}
         defaultValue=""
+        onChange={(e) => {
+          handleCategoryChange(e); // Atualiza o estado com a categoria selecionada
+        }}
+        name={name}
+        value={selectedCategory}
       >
         <option value="" disabled>
           {placeholder}

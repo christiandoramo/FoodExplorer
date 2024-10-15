@@ -11,7 +11,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { productService } from "../../services/products";
 import { useNavigate } from "react-router-dom";
-import { PRODUCT_CATEGORY } from "../../enums/category";
 import { ProductRegisterData } from "../../interfaces/product";
 import { Navbar } from "../../components/navbar";
 import { Footer } from "../../components/footer";
@@ -40,13 +39,9 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const productCreateSchema = z.object({
   name: z.string().min(2, "O nome é obrigatório"),
-  category: z.nativeEnum(PRODUCT_CATEGORY, {
-    errorMap: () => {
-      return { message: "Selecione uma categoria" };
-    },
-  }),
+  category: z.string().min(3, "Selecione uma categoria"),
   description: z.string().min(1, "Insira alguma descrição"),
-  price: z.number().positive("O preço deve ser um número positivo"),
+  price: z.string().min(1, { message: "O preço é obrigatório" }), // Aqui garantimos que o valor será numérico, mas sem o "R$"
   file: z
     .instanceof(File, { message: "Insira a imagem do produto" }) //+conversationId":"fac3d0e0-08e8-4d2f-8817-07e45a0bf925","source":"instruct"}
     .refine((file) => {
@@ -111,13 +106,18 @@ export const ProductCreate: React.FC<any> = () => {
   // }
 
   const createProduct = async (data: ProductRegisterData): Promise<void> => {
+    const price = parseFloat(
+      data.price.replace("R$", "").replace(",", ".").trim()
+    );
+    console.log(data);
+
     const formData = new FormData();
     const ingredients = data.ingredients || [];
     formData.append("file", data.file);
     formData.append("name", data.name);
     formData.append("ingredients", JSON.stringify(ingredients));
-    formData.append("price", JSON.stringify(data.price));
-    formData.append("category", JSON.stringify(data.category));
+    formData.append("price", JSON.stringify(price)); // Converte o número para string antes de enviar
+    formData.append("category", data.category);
     formData.append("description", data.description);
 
     const createResponse = await productService.createProduct(data);
@@ -172,6 +172,7 @@ export const ProductCreate: React.FC<any> = () => {
             registerOptions={{ required: true }}
             error={errors.category}
             register={register}
+            setValue={setValue}
           />
           <IngredientsInput
             label="Ingredientes"
@@ -210,6 +211,7 @@ export const ProductCreate: React.FC<any> = () => {
             register={register}
             error={errors.price}
             registerOptions={{ required: true }}
+            setValue={setValue}
           />
           <TextAreaInput
             label="Descrição"

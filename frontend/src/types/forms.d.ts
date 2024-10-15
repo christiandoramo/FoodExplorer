@@ -10,6 +10,15 @@ export declare global {
     registerOptions?: RegisterOptions;
     placeholder?: string;
   }
+  interface FormValueTextProps {
+    label: string;
+    name: string;
+    register: UseFormRegister<any>;
+    error: any;
+    registerOptions?: RegisterOptions;
+    placeholder?: string;
+    setValue: UseFormSetValue<any>;
+  }
   interface FormUploadProps {
     label: string;
     name: string;

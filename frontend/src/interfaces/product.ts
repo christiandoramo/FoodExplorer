@@ -1,10 +1,9 @@
-import { PRODUCT_CATEGORY } from "../enums/category";
 import { IngredientData } from "./ingredientData";
 
 export interface Product {
   name: string;
   ingredients: IngredientData[];
-  category: PRODUCT_CATEGORY;
+  category: string;
   description: string;
   price: number;
   avatar?: string;
@@ -14,8 +13,8 @@ export interface Product {
 export interface ProductRegisterData {
   name: string;
   ingredients: IngredientData[];
-  category: PRODUCT_CATEGORY;
+  category: string;
   description: string;
-  price: number;
+  price: string;
   file: File;
 }

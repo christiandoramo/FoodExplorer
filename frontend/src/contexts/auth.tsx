@@ -9,19 +9,18 @@ import api from "../services/api";
 interface AuthContextData {
   signIn: (data: UserLoginData) => Promise<any>;
   signOut: () => void;
-  user: User;
+  user: User | null;
+  refreshSign: () => void;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextData | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<User>({
-    email: "",
-    id: "",
-    name: "",
-    role: "",
-  });
+  const [loading, setLoading] = useState<boolean>(true); // Estado de carregamento
+  const [user, setUser] = useState<User | null>(null);
   const [, , removeCookie] = useCookies([
     "@food_explorer/refresh_token",
     "@food_explorer/user_id",
@@ -32,8 +31,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!!response) {
       localStorage.setItem(
         "@food_explorer/session_token",
-        JSON.stringify(response.data.session_token)
+        response.data.session_token
       );
+      localStorage.setItem("@food_explorer/user_id", response.data.user_id);
       api.defaults.headers.common = {
         Authorization: "Bearer " + response.data.session_token,
       };
@@ -87,42 +87,136 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       removeCookie("@food_explorer/refresh_token", { path: "/" });
       removeCookie("@food_explorer/user_id", { path: "/" });
       localStorage.removeItem("@food_explorer/session_token");
-      setUser({ email: "", id: "", name: "", role: "" });
+      localStorage.removeItem("@food_explorer/user_id");
+
+      setUser(null);
       navigate("/");
     }
   };
 
-  useEffect(() => {
-    async function reconnect() {
-      const user_id = localStorage.getItem("@food_explorer/user_id") || null;
-      const session_token =
-        localStorage.getItem("@food_explorer/session_token") || null;
-      if (user_id != null && session_token !== null) {
-        api.defaults.withCredentials = true;
-        const response = await toast.promise(sessionService.refreshSession, {
-          pending: "Recuperando sessão",
-          error: "Ocorreu um erro: ",
-        });
-        if (response) {
-          const foundUser: User = await toast.promise(
-            () => userService.getUserById(response.user_id),
-            {
-              pending: "Buscando usuário",
-              success: "Relogado novamento com sucesso",
-              error: "Ocorreu um erro: ",
-            }
-          );
-          if (foundUser) {
-            setUser(foundUser);
-          }
-        }
+  const refreshSign = async () => {
+    try {
+      const sessionToken = localStorage.getItem("@food_explorer/session_token");
+      const userId = localStorage.getItem("@food_explorer/user_id");
+      api.defaults.headers.common = {
+        Authorization: "Bearer " + sessionToken,
+      };
+
+      if (!userId || !sessionToken) {
+        throw new Error("Credenciais não verificadas");
       }
+
+      api.defaults.withCredentials = true;
+      const foundUserPromise = new Promise((resolve) =>
+        resolve(userService.getUserById(userId))
+      );
+
+      const foundUser: User = await toast.promise(foundUserPromise, {
+        pending: {
+          render() {
+            return `Buscando dados do usuário`;
+          },
+          icon: false,
+          theme: "dark",
+        },
+        success: {
+          render({ data }: { data: any }) {
+            return `Olá novamente, ${data?.name} 1! 🤗`;
+          },
+          theme: "dark",
+        },
+        error: {
+          render({ data }: { data: any }) {
+            return `${
+              data?.response?.data?.message ||
+              data?.message ||
+              "Ocorreu um erro"
+            }`;
+          },
+          theme: "dark",
+        },
+      });
+
+      if (foundUser) {
+        setUser(foundUser);
+        setLoading(false);
+        navigate("/");
+        return;
+      }
+    } catch (err) {
+      api.defaults.withCredentials = false;
+      throw err;
     }
-    if (!user) reconnect();
-  }, [user]);
+
+    try {
+      const response = await sessionService.refreshSession();
+      if (!response) throw new Error("Refresh de sessão não concluído");
+      localStorage.setItem(
+        "@food_explorer/session_token",
+        response.data.session_token
+      );
+      localStorage.setItem("@food_explorer/user_id", response.data.user_id);
+      api.defaults.headers.common = {
+        Authorization: "Bearer " + response.data.session_token,
+      };
+
+      api.defaults.withCredentials = true;
+
+      const foundUserPromise = new Promise((resolve) =>
+        resolve(userService.getUserById(response.data.user_id))
+      );
+
+      const foundUser: User = await toast.promise(foundUserPromise, {
+        pending: {
+          render() {
+            return `Buscando dados do usuário`;
+          },
+          icon: false,
+          theme: "dark",
+        },
+        success: {
+          render({ data }: { data: any }) {
+            return `Olá novamente, ${data.name} 2! 🤗`;
+          },
+          theme: "dark",
+        },
+        error: {
+          render({ data }: { data: any }) {
+            // When the promise reject, data will contains the error
+            return `${
+              data?.response?.data?.message ||
+              data?.message ||
+              "Ocorreu um erro"
+            }`;
+          },
+          theme: "dark",
+        },
+      });
+
+      if (!!foundUser) {
+        setUser(foundUser);
+        setLoading(false);
+        navigate("/");
+      }
+    } catch (err) {
+      api.defaults.withCredentials = false;
+      navigate("/");
+      toast.error(
+        "Faz 1 semana que você não volta.\nPor favor, faça login novamente!"
+      );
+      throw err;
+    } finally {
+      setLoading(false); // Quando termina de buscar, remove o estado de carregamento
+    }
+  };
+  useEffect(() => {
+    refreshSign();
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut, user }}>
+    <AuthContext.Provider
+      value={{ signIn, signOut, refreshSign, user, loading, setLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

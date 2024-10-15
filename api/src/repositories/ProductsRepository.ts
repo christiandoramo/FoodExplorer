@@ -24,12 +24,14 @@ export class ProductsRepository {
     const [result] = await db("products")
       .insert({ name, description, category, price, avatar })
       .returning("id");
-    ingredients.forEach(async (ingredient) => {
-      await db("ingredients").insert({
-        name: ingredient.name,
-        product_id: result.id,
+    if (ingredients.length > 0) {
+      ingredients.forEach(async (ingredient) => {
+        await db("ingredients").insert({
+          name: ingredient.name,
+          product_id: result.id,
+        });
       });
-    });
+    }
     return result.id;
   }
   async findProductsByNameAndIngredients({

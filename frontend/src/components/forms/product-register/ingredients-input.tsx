@@ -29,7 +29,7 @@ export const IngredientsInput: React.FC<FormIngredientsProps> = ({
     if (newIngredient) {
       setValue(
         register.name,
-        [...ingredients, { name: newIngredient.trim() }],
+        [...ingredients, { name: newIngredient.trim(), amount: 1 }],
         { shouldValidate: true }
       );
       setNewIngredient("");

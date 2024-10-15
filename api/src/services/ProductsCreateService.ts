@@ -60,6 +60,7 @@ export class ProductsCreateService {
     file,
     ingredients,
   }: ProductCreateData) {
+    ingredients = ingredients?.length ? ingredients : [];
     try {
       productCreateSchema.safeParse({
         name,

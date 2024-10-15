@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 interface CarouselProps {
   productsByCategory: Product[];
-  user: User;
+  user: User | null;
 }
 
 export const Row: React.FC<CarouselProps> = ({ productsByCategory, user }) => {

@@ -2,12 +2,10 @@ export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function formatToBRL(value: number): string {
-  // Converter o número para uma string com duas casas decimais
-  let stringValue = value.toFixed(2);
-
+export function formatToBRL(value: string): string {
+  const numericString = Number(value).toFixed(2);
   // Substituir o ponto por vírgula
-  stringValue = stringValue.replace(".", ",");
+  let stringValue = numericString.replace(".", ",");
 
   // Garantir que a string tenha pelo menos um dígito antes da vírgula
   const parts = stringValue.split(",");

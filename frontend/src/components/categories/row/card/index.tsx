@@ -14,7 +14,7 @@ import { formatToAmount, formatToBRL } from "../../../../utils/strings";
 
 interface CardProps {
   product: Product;
-  user: User;
+  user: User | null;
   handleProductAmount: (product: Product, plusOrMinus: String) => void;
   handleInclude: (product: Product) => void;
   productAmount: number;
@@ -46,7 +46,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <Container className={"bg-dark-200"}>
       <SecundaryActionComponent>
-        {user.role === USER_ROLES.ADMIN ? (
+        {user?.role === USER_ROLES.ADMIN ? (
           <PencilSimple z={2} size={32} />
         ) : (
           <HeartStraight
@@ -64,7 +64,7 @@ export const Card: React.FC<CardProps> = ({
         <CaretRight onClick={onCardClick} size={32} />
       </div>
       <div>{product.description}</div>
-      <div>{formatToBRL(product.price * productAmount)}</div>
+      <div>{formatToBRL((product.price * productAmount).toString())}</div>
       <div>
         <Minus
           onClick={() => handleProductAmount(product, "minus")}

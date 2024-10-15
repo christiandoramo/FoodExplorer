@@ -12,7 +12,6 @@ export class ProductsController {
   async create(request: ProductRequest, response: Response) {
     const { name, description, category, price, ingredients } = request.body;
     const file = request?.file;
-    const parsedIngredients = JSON.parse(ingredients) || [];
 
     const productsRepository = new ProductsRepository();
     const productsCreateService = new ProductsCreateService(productsRepository);
@@ -23,7 +22,7 @@ export class ProductsController {
       category,
       price,
       file,
-      ingredients: parsedIngredients,
+      ingredients,
     });
     return response.status(201).json(newProduct);
   }
