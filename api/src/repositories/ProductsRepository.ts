@@ -189,54 +189,43 @@ export class ProductsRepository {
     offset = offset && offset >= 0 ? offset : 0;
 
     try {
-      // Busca todas as categorias distintas na tabela de produtos
       const categories = await db("products").distinct("category");
 
-      // Objeto para armazenar os produtos categorizados
       const categorizedProducts: Record<string, any[]> = {};
 
-      // Itera sobre cada categoria para buscar os produtos
       for (const categoryObj of categories) {
         const categoryName = categoryObj.category;
 
-        // Busca limitada de produtos para cada categoria
         const products = await db("products")
           .where("category", categoryName)
           .orderBy("price", "asc")
           .limit(limit)
           .offset(offset);
 
-        // Se não há produtos na categoria, continue para a próxima
         if (products.length === 0) {
           continue;
-        } else if (products.length === 1) {
-          const allIngredients = await db("ingredients").whereIn(
-            "product_id",
-            products[0].id
-          );
-          categorizedProducts[categoryName] = this.getProductWithIngredients(
-            products[0],
-            allIngredients
-          );
-          continue;
         }
-
-        // Busca todos os ingredientes associados aos produtos desta categoria
         const productIds = products.map((product) => product.id);
         const allIngredients = await db("ingredients").whereIn(
           "product_id",
           productIds
         );
-        // Associa os ingredientes aos produtos
+
         const productsWithIngredients = products.map((product) => {
-          const ingredients = allIngredients.filter(
-            (ingredient) => ingredient.product_id === product.id
-          );
+          const ingredients =
+            allIngredients?.length > 0
+              ? allIngredients.filter(
+                  (ingredient) => ingredient.product_id === product.id
+                )
+              : [];
           return { ...product, ingredients };
         });
+
+        // Garantir que mesmo se houver 1 produto, ele seja colocado em um array
         categorizedProducts[categoryName] = productsWithIngredients;
       }
-      return categorizedProducts;
+
+      return Object.values(categorizedProducts);
     } catch (error) {
       console.error("Erro ao buscar produtos categorizados:", error);
       throw error;

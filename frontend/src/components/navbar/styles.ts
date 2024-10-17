@@ -7,10 +7,11 @@ export const Container = styled.div`
   align-items: center;
   padding: 10px 20px;
   position: relative;
-
+  margin-bottom: 22px;
   @media (min-width: 769px) {
     padding: 28px 50px;
     gap: 10px;
+    margin-bottom: 58px;
   }
 `;
 

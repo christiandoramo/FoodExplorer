@@ -5,6 +5,7 @@ import { productService } from "../../services/products";
 import { Row } from "./row";
 import { useAuth } from "../../contexts/auth";
 import { Skeleton } from "@mui/material";
+import { getRandomColor } from "../../utils/randomics";
 
 export const Categories: React.FC<any> = () => {
   const [products, setProducts] = useState<Product[][]>([]);
@@ -31,7 +32,7 @@ export const Categories: React.FC<any> = () => {
         setProducts(response);
         setTimeout(() => {
           setIsLoading(false);
-        }, 1000);
+        }, 2000);
       }
     }
     getProductsCategorized();
@@ -43,10 +44,23 @@ export const Categories: React.FC<any> = () => {
         <>
           {matrixPlaceholder.map((arrayOfMatrixPlaceholder) => (
             <>
-              <Skeleton variant="text" width="20%" />
-              {arrayOfMatrixPlaceholder.map(() => (
-                <Skeleton variant="rectangular" height={462} width={304} />
-              ))}
+              <Skeleton
+                height={58}
+                className="text-light-100"
+                variant="text"
+                width="20%"
+                sx={{ bgcolor: getRandomColor() }}
+              />
+              <div style={{ display: "flex", gap: "10px", flexWrap: "nowrap" }}>
+                {arrayOfMatrixPlaceholder.map(() => (
+                  <Skeleton
+                    sx={{ bgcolor: getRandomColor() }}
+                    variant="rectangular"
+                    height={462}
+                    width={304}
+                  />
+                ))}
+              </div>
             </>
           ))}
         </>

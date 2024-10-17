@@ -10,14 +10,14 @@ export const Container = styled.div`
 `;
 
 export const PageLabelContainer = styled.div`
-  padding-top: 58px;
   padding-left: 122px;
   display: flex;
   flex-direction: column;
   width: 100%;
+
   h1 {
     text-align: left;
-    padding: 0 32px;
+    padding: 32px 0;
   }
 
   justify-content: flex-start;
@@ -35,7 +35,7 @@ export const PageLabelContainer = styled.div`
   }
 `;
 export const CreateContainer = styled.div`
-  padding: 116px 122px;
+  padding: 58px 122px;
   gap: 32px;
   border-radius: 16px;
   display: flex;

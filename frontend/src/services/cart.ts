@@ -1,55 +1,81 @@
+import { toast } from "react-toastify";
+
+interface CartItem {
+  id: string;
+  amount: number;
+  name: string;
+}
+
+type CartMap = Map<string, CartItem>; // id - id, amount. name
+
 class CartService {
   private static CART_KEY = "@food_explorer/cart";
   // Adiciona um item ao carrinho
-  public static addToCart(productId: string): void {
-    const cart = this.getCartItems();
-    cart.push(productId);
-    localStorage.setItem(this.CART_KEY, JSON.stringify(cart));
-  }
-  public static addMultiplesToCart(productId: string, amount: number): void {
-    const cart = this.getCartItems();
-    for (let i = 0; i < amount; i++) {
-      cart.push(productId);
-      localStorage.setItem(this.CART_KEY, JSON.stringify(cart));
-    }
-  }
+  public static addMultiplesToCart({
+    productId,
+    amount,
+    name,
+  }: {
+    productId: string;
+    amount: number;
+    name: string;
+  }): void {
+    const cart: CartMap = this.getCartItems() || new Map();
+    console.log("0: ", cart);
+    const cartItem = this.getCartItem(productId);
+    console.log("1: ", cartItem);
 
-  public static removeMultiplesFromCart(
-    productId: string,
-    amount: number
-  ): void {
-    let cart = this.getCartItems(); // Obtém os itens do carrinho do localStorage
-    for (let i = 0; i < amount; i++) {
-      const index = cart.indexOf(productId); // Encontra o índice do productId no array
-      if (index !== -1) {
-        // Se o productId existir no carrinho (index !== -1)
-        cart.splice(index, 1); // Remove o item do array
-        localStorage.setItem(this.CART_KEY, JSON.stringify(cart)); // Atualiza o localStorage com o novo array do carrinho
-      }
+    if (!cartItem) {
+      cart.set(productId, { id: productId, amount, name });
+      localStorage.setItem(this.CART_KEY, JSON.stringify([...cart]));
+      toast.success(`${name} adicionado ${amount}`);
+    } else if (!!cartItem && cartItem.amount + amount < 99) {
+      cart.set(productId, {
+        id: productId,
+        amount: cartItem.amount + amount,
+        name,
+      });
+      localStorage.setItem(this.CART_KEY, JSON.stringify([...cart]));
+      toast.success(`${cartItem.name} adicionado ${amount}`);
+    } else {
+      toast.warning(`${cartItem.name} adicionado 99x`);
     }
   }
-  // Retorna todos os itens do carrinho
-  public static getCartItems(): string[] {
-    const cart = localStorage.getItem(this.CART_KEY);
-    return cart ? JSON.parse(cart) : [];
+  public static getCartItems(): CartMap {
+    const cartJson = localStorage.getItem(this.CART_KEY);
+    const cart: CartMap = cartJson ? new Map(JSON.parse(cartJson)) : new Map();
+    return cart;
+  }
+  public static getCartItem(productId: string): CartItem | null {
+    const cart = this.getCartItems();
+    if (!!cart) return cart.get(productId) || null;
+    return null;
   }
   // Retorna o número de vezes que um produto específico foi adicionado ao carrinho
-  public static getProductCount(productId: string): number {
+  public static getProductAmount(productId: string): number {
     const cart = this.getCartItems();
-    return cart.filter((id) => id === productId).length;
+    const amount = cart.get(productId)?.amount;
+    return amount || 0;
   }
-  public static removeFromCart(productId: string): void {
-    let cart = this.getCartItems(); // Obtém os itens do carrinho do localStorage
-    const index = cart.indexOf(productId); // Encontra o índice do productId no array
-
-    if (index !== -1) {
-      // Se o productId existir no carrinho (index !== -1)
-      cart.splice(index, 1); // Remove o item do array
-      localStorage.setItem(this.CART_KEY, JSON.stringify(cart)); // Atualiza o localStorage com o novo array do carrinho
-    }
-  }
-  // Limpa todos os itens do carrinho
   public static clearCart(): void {
     localStorage.removeItem(this.CART_KEY);
   }
+  public static removeFromCart(productId: string): void {
+    const cart: CartMap = this.getCartItems() || new Map();
+    const cartItem = this.getCartItem(productId);
+    if (!!cartItem) {
+      if (cartItem.amount > 0) {
+        cart.set(productId, {
+          id: productId,
+          amount: cartItem.amount - 1,
+          name: cartItem.name,
+        });
+        toast.success(`1x ${cartItem.name} remomvido`);
+      } else {
+        cart.delete(productId);
+      }
+      localStorage.setItem(this.CART_KEY, JSON.stringify([...cart]));
+    }
+  }
 }
+export default CartService;

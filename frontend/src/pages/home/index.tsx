@@ -7,7 +7,7 @@ import { Categories } from "../../components/categories";
 
 export const Home: React.FC<any> = () => {
   return (
-    <Container className="bg-home">
+    <Container className="bg-gradient-100">
       <Navbar />
       <Banner />
       <Categories />

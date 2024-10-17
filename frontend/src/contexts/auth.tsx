@@ -1,10 +1,10 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { sessionService } from "../services/sessions";
 import { userService } from "../services/users";
 import api from "../services/api";
+import CartService from "../services/cart";
 
 interface AuthContextData {
   signIn: (data: UserLoginData) => Promise<any>;
@@ -21,10 +21,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true); // Estado de carregamento
   const [user, setUser] = useState<User | null>(null);
-  const [, , removeCookie] = useCookies([
-    "@food_explorer/refresh_token",
-    "@food_explorer/user_id",
-  ]);
 
   const signIn = async ({ email, password }: UserLoginData) => {
     const response = await sessionService.login({ email, password });
@@ -84,10 +80,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!user) return;
     const response = await sessionService.logoff();
     if (response) {
-      removeCookie("@food_explorer/refresh_token", { path: "/" });
-      removeCookie("@food_explorer/user_id", { path: "/" });
       localStorage.removeItem("@food_explorer/session_token");
       localStorage.removeItem("@food_explorer/user_id");
+      CartService.clearCart();
 
       setUser(null);
       navigate("/");
@@ -106,7 +101,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         throw new Error("Credenciais não verificadas");
       }
 
-      api.defaults.withCredentials = true;
       const foundUserPromise = new Promise((resolve) =>
         resolve(userService.getUserById(userId))
       );
@@ -144,7 +138,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
     } catch (err) {
-      api.defaults.withCredentials = false;
       throw err;
     }
 
@@ -159,8 +152,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       api.defaults.headers.common = {
         Authorization: "Bearer " + response.data.session_token,
       };
-
-      api.defaults.withCredentials = true;
+      console.log();
 
       const foundUserPromise = new Promise((resolve) =>
         resolve(userService.getUserById(response.data.user_id))
@@ -199,7 +191,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         navigate("/");
       }
     } catch (err) {
-      api.defaults.withCredentials = false;
       navigate("/");
       toast.error(
         "Faz 1 semana que você não volta.\nPor favor, faça login novamente!"

@@ -111,8 +111,11 @@ export const ProductCreate: React.FC<any> = () => {
     );
     console.log(data);
 
+    return;
+
     const formData = new FormData();
-    const ingredients = data.ingredients || [];
+    const ingredients =
+      data.ingredients.map((ingredient) => ingredient.name) || [];
     formData.append("file", data.file);
     formData.append("name", data.name);
     formData.append("ingredients", JSON.stringify(ingredients));

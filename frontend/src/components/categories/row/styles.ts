@@ -5,9 +5,9 @@ interface CarouselInnerProps {
 }
 
 export const Container = styled.div`
-display:flex;
-flex-direction: column
-width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `;
 
 export const CarouselContainer = styled.div`

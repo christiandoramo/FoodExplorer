@@ -162,10 +162,10 @@ export const GlobalStyle = createGlobalStyle`
     background-color: rgba(25,34,39,1);
   }
   .bg-gradient-100 {
-    background: linear-gradient(to right, rgba(13,22,27,1), rgba(77,88,94,1));
+    background: linear-gradient(to right, rgba(13,22,27,1), rgba(13,22,27,1));
   }
   .bg-gradient-200 {
-    background: linear-gradient(to right, rgba(25,34,39,1), rgba(3,23,31,1));
+    background: linear-gradient(to right, rgba(25,34,39,1), rgba(25,34,39,1));
   }
 
   .bg-tints-tomato-100 {

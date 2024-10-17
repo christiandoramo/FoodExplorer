@@ -14,6 +14,8 @@ export const Container = styled.div`
   position: relative;
   height: 462px;
   width: 304px;
+
+  border-radius: 8px;
 `;
 
 export const Thumbnail = styled.img`

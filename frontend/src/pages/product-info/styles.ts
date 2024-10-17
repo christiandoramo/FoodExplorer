@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 100dvw;
-  height: 100dvh;
+  width: 100%;
+  height: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,7 +28,7 @@ export const InfoContainer = styled.div`
   padding: 116px 122px;
   gap: 32px;
   border-radius: 16px;
-  flex-direction: column;
+
   display: flex;
   h1 {
     text-align: center;

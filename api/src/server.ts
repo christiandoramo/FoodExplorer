@@ -7,6 +7,7 @@ import AppError from "./utils/AppError";
 import { routes } from "./routes";
 const cookieParser = require("cookie-parser");
 import { connection } from "./database";
+import path from "path";
 
 connection();
 const app = express();
@@ -32,6 +33,9 @@ app.use(
 
 app.use(express.json());
 app.use(routes);
+
+const publicPath = path.resolve(__dirname, "..", "public");
+app.use("/uploads", express.static(path.join(publicPath, "uploads")));
 
 app.use(
   (error: Error, request: Request, response: Response, next: NextFunction) => {

@@ -19,7 +19,7 @@ export class SessionsRefreshController {
     try {
       const authHeader = request.headers;
       if (!authHeader || !authHeader?.cookie)
-        throw new AppError("Sem autenticação", 401);
+        throw new AppError("Sem autenticação 2", 401);
       const cookies = parse(authHeader.cookie);
       const refresh_token = cookies["@food-explorer/refresh_token"];
 
