@@ -24,3 +24,14 @@ export function formatToAmount(value: number): string {
   if (value >= 10) return value.toString();
   return `0${value.toString()}`;
 }
+
+export function cleanPrice(value: string): string {
+  // Remove o prefixo "R$", espaços em branco e caracteres não numéricos, exceto a vírgula
+  const cleanedValue = value
+    .replace(/R\$\s*/g, "")
+    .replace(/\s+/g, "")
+    .replace(",", ".");
+
+  // Verifica se a string resultante não está vazia e retorna
+  return cleanedValue.length > 0 ? cleanedValue : "";
+}

@@ -16,6 +16,13 @@ export const Container = styled.div`
   width: 304px;
 
   border-radius: 8px;
+
+  .heart {
+    transition: all 0.3s ease;
+  }
+  .heart:hover {
+    transform: scale(1.1); /* Aumenta um pouco o tamanho ao passar o mouse */
+  }
 `;
 
 export const Thumbnail = styled.img`

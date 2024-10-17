@@ -3,6 +3,7 @@ import { Product } from "../../../interfaces/product";
 import { capitalizeFirstLetter } from "../../../utils/strings";
 import { CarouselContainer, CarouselInner, Container } from "./styles";
 import { Card } from "./card";
+import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
 
 interface CarouselProps {
   productsByCategory: Product[];
@@ -14,6 +15,22 @@ export const Row: React.FC<CarouselProps> = ({ productsByCategory, user }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const startX = useRef(0);
   const dragging = useRef(false);
+
+  const cardWidth = 300; // Ajuste conforme a largura real do card
+  const gap = 16;
+
+  const handlePrevClick = () => {
+    const newOffset = Math.max(offset - (cardWidth + gap), 0);
+    setOffset(newOffset);
+  };
+
+  const handleNextClick = () => {
+    const maxOffset =
+      productsByCategory.length * (cardWidth + gap) -
+      (containerRef.current?.offsetWidth || 0);
+    const newOffset = Math.min(offset + (cardWidth + gap), maxOffset);
+    setOffset(newOffset);
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     dragging.current = true;
@@ -60,23 +77,30 @@ export const Row: React.FC<CarouselProps> = ({ productsByCategory, user }) => {
       <h2 className="text-light-300">
         {capitalizeFirstLetter(productsByCategory[0].category)}
       </h2>
-
-      <CarouselContainer
-        ref={containerRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <CarouselInner offset={offset}>
-          {productsByCategory.map((product, index) => (
-            <Card product={product} user={user} key={index} />
-          ))}
-        </CarouselInner>
-      </CarouselContainer>
+      <div className="row-container">
+        <button onClick={handlePrevClick}>
+          <ArrowLeft />
+        </button>
+        <CarouselContainer
+          ref={containerRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <CarouselInner offset={offset}>
+            {productsByCategory.map((product, index) => (
+              <Card product={product} user={user} key={index} />
+            ))}
+          </CarouselInner>
+        </CarouselContainer>
+        <button onClick={handleNextClick}>
+          <ArrowRight />
+        </button>
+      </div>
     </Container>
   );
 };

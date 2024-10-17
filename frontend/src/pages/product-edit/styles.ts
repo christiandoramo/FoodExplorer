@@ -35,7 +35,7 @@ export const PageLabelContainer = styled.div`
     border: none;
   }
 `;
-export const CreateContainer = styled.div`
+export const EditContainer = styled.div`
   padding: 58px 122px;
   gap: 32px;
   border-radius: 16px;
@@ -82,7 +82,7 @@ export const CreateContainer = styled.div`
   }
 `;
 
-export const CreateNewDishButton = styled.button`
+export const EditNewDishButton = styled.button`
   width: 285px;
   height: 48px;
   border-radius: 5px;

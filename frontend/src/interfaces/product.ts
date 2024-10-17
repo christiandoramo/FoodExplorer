@@ -18,3 +18,12 @@ export interface ProductRegisterData {
   price: string;
   file: File;
 }
+
+export interface ProductUpdateData {
+  name?: string;
+  ingredients?: IngredientData[];
+  category?: string;
+  description?: string;
+  price?: string;
+  file?: File;
+}

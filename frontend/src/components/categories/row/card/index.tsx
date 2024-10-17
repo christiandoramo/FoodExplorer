@@ -27,13 +27,17 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
     setIsSetFavoritLoading(true);
     setTimeout(() => {
       setIsSetFavoritLoading(false);
-      setIsFavorite(!isFavorite);
-    }, 1000);
+      setIsFavorite((prev: boolean) => !prev);
+    }, 300);
   };
   const navigate = useNavigate();
 
   const onCardClick = () => {
     navigate(`/product-info/${product.id}`);
+  };
+
+  const onPencilClick = () => {
+    navigate(`/product-edit/${product.id}`);
   };
 
   return (
@@ -45,63 +49,72 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
       />
       <SecundaryActionComponent>
         {user?.role === USER_ROLES.ADMIN ? (
-          <PencilSimple z={2} size={32} />
+          <PencilSimple
+            cursor={"pointer"}
+            onClick={onPencilClick}
+            z={2}
+            size={32}
+          />
         ) : (
           <HeartStraight
+            className="heart"
             z={2}
             size={32}
             weight={!isFavorite ? "regular" : "fill"}
             color={"red"}
             onClick={toggleFavorite}
             aria-disabled={isSetFavoritLoading}
+            cursor={"pointer"}
           />
         )}
       </SecundaryActionComponent>
       <div>
         {product.name}
-        <CaretRight onClick={onCardClick} size={32} />
+        <CaretRight cursor={"pointer"} onClick={onCardClick} size={32} />
       </div>
       <div>{product.description}</div>
       <div>{formatToBRL((product.price * toInclude).toString())}</div>
-      <div>
-        <Minus
-          onClick={() =>
-            setToInclude((prev: number) => {
-              if (prev > 1) return prev - 1;
-              else return prev;
-            })
-          }
-          cursor={"pointer"}
-          size={32}
-        />
-        <div>{formatToAmount(toInclude)}</div>
-        <Plus
-          onClick={() =>
-            setToInclude((prev: number) => {
-              if (
-                prev < 99 &&
-                CartService.getProductAmount(product.id) + 1 < 99
-              )
-                return prev + 1;
-              else return prev;
-            })
-          }
-          cursor={"pointer"}
-          size={32}
-        />
-        <div
-          style={{ cursor: "pointer" }}
-          onClick={() =>
-            CartService.addMultiplesToCart({
-              productId: product.id,
-              amount: toInclude,
-              name: product.name,
-            })
-          }
-        >
-          Incluir
+      {user?.role === USER_ROLES.DEFAULT && (
+        <div>
+          <Minus
+            onClick={() =>
+              setToInclude((prev: number) => {
+                if (prev > 1) return prev - 1;
+                else return prev;
+              })
+            }
+            cursor={"pointer"}
+            size={32}
+          />
+          <div>{formatToAmount(toInclude)}</div>
+          <Plus
+            onClick={() =>
+              setToInclude((prev: number) => {
+                if (
+                  prev < 99 &&
+                  CartService.getProductAmount(product.id) + 1 < 99
+                )
+                  return prev + 1;
+                else return prev;
+              })
+            }
+            cursor={"pointer"}
+            size={32}
+          />
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              CartService.addMultiplesToCart({
+                productId: product.id,
+                amount: toInclude,
+                name: product.name,
+              })
+            }
+          >
+            Incluir
+          </div>
         </div>
-      </div>
+      )}
     </Container>
   );
 };

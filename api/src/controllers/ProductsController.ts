@@ -15,14 +15,13 @@ export class ProductsController {
 
     const productsRepository = new ProductsRepository();
     const productsCreateService = new ProductsCreateService(productsRepository);
-
     const newProduct = await productsCreateService.execute({
       name,
       description,
       category,
       price,
       file,
-      ingredients,
+      ingredients: JSON.parse(ingredients),
     });
     return response.status(201).json(newProduct);
   }

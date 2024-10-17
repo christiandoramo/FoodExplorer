@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { InputContainer, StringInputElement } from "./styles";
 import { useMask } from "@react-input/mask";
+import { cleanPrice } from "../../../utils/strings";
 
 export const PriceInput: React.FC<FormValueTextProps> = ({
   label,
@@ -8,34 +9,46 @@ export const PriceInput: React.FC<FormValueTextProps> = ({
   error,
   placeholder,
   setValue,
+  defaultValue,
 }) => {
   const inputRef = useMask({ mask: "R$ __,__", replacement: { _: /\d/ } });
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState<string>("");
+  const [isInitialized, setIsInitialized] = useState<boolean>(false); // Estado para rastrear a inicialização
+
+  // Use useEffect para definir o preço inicial
+  useEffect(() => {
+    if (!isInitialized && defaultValue) {
+      updateDefaultValue(defaultValue); // Atualiza o valor padrão
+      setIsInitialized(true); // Marca como inicializado
+    }
+  }, [defaultValue, isInitialized]);
 
   const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPrice = cleanPrice(e.target.value);
     setPrice(e.target.value);
     setValue(name, newPrice, { shouldValidate: true });
-    console.log(newPrice);
-  };
-  const cleanPrice = (value: string) => {
-    // Remove o prefixo "R$", espaços em branco e caracteres não numéricos, exceto a vírgula
-    const cleanedValue = value
-      .replace(/R\$\s*/g, "")
-      .replace(/\s+/g, "")
-      .replace(",", ".");
-
-    // Verifica se a string resultante não está vazia e retorna
-    return cleanedValue.length > 0 ? cleanedValue : "";
   };
 
-  // // Armazena o valor atual do input para limpeza
-  // const [inputValue, setInputValue] = React.useState("");
+  const updateDefaultValue = (newValue: string) => {
+    const charsArray = newValue.split(""); // Converte a string em um array de caracteres
 
-  // Efeito para atualizar o valor limpo no registro
-  // useEffect(() => {
-  //   register(name).onChange({ target: { value: cleanPrice(inputValue) } });
-  // }, [inputValue, name, register]);
+    // Simular a digitação
+    let updatedPrice = "";
+    const typeChar = (char: string) => {
+      // Aqui estamos simulando a entrada no campo
+      updatedPrice = updatedPrice + char; // Adiciona o caractere atual
+      setPrice(updatedPrice); // Atualiza o estado do preço
+
+      // Atualiza o valor do formulário
+      const cleanUpdatedPrice = cleanPrice(updatedPrice);
+      setValue(name, cleanUpdatedPrice, { shouldValidate: true });
+    };
+
+    charsArray.forEach((char, index) => {
+      // Usar um pequeno timeout para simular a digitação
+      setTimeout(() => typeChar(char), index * 50); // Simula a digitação com um delay
+    });
+  };
 
   return (
     <InputContainer>
@@ -50,10 +63,8 @@ export const PriceInput: React.FC<FormValueTextProps> = ({
         ref={inputRef}
         style={{ maxWidth: 251 }}
         name={name}
-        value={price} // Controla o valor do input
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          handleValueChange(e);
-        }}
+        value={price} // Controla o valor do input com o estado `price`
+        onChange={handleValueChange} // Mantém a lógica de alteração do preço
       />
       {error && (
         <span className="text-tints-tomato-400 roboto small-regular">

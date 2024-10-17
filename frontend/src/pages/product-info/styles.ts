@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Container = styled.div`
   width: 100%;
   height: auto;
+  min-height: 100dvh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -18,6 +19,8 @@ export const ProductInfoContainer = styled.div`
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
+  height: auto;
+
   h1 {
   }
   p {
@@ -25,9 +28,10 @@ export const ProductInfoContainer = styled.div`
 `;
 
 export const InfoContainer = styled.div`
-  padding: 116px 122px;
+  padding: 0 122px 58px;
   gap: 32px;
   border-radius: 16px;
+  height: auto;
 
   display: flex;
   h1 {

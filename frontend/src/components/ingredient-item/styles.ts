@@ -22,6 +22,7 @@ export const Container = styled.div<TagContainerProps>`
   > button {
     border: none;
     background: none;
+    cursor: pointer;
   }
 
   .button-delete {

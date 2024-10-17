@@ -24,7 +24,7 @@ export const Categories: React.FC<any> = () => {
     async function getProductsCategorized() {
       const response: Product[][] = await productService.getProductsCategorized(
         {
-          limit: 10,
+          limit: 100,
           offset: 0,
         }
       );

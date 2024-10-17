@@ -18,6 +18,8 @@ export declare global {
     registerOptions?: RegisterOptions;
     placeholder?: string;
     setValue: UseFormSetValue<any>;
+    getValues?: UseFormGetValues<any>;
+    defaultValue?: string;
   }
   interface FormUploadProps {
     label: string;
@@ -35,7 +37,7 @@ export declare global {
     error: any;
     registerOptions?: RegisterOptions;
     placeholder?: string;
-    getValues: UseFormGetValues<any>;
+    getValues?: UseFormGetValues<any>;
     setValue: UseFormSetValue<any>;
   }
 }

@@ -25,9 +25,11 @@ export class ProductsRepository {
       .insert({ name, description, category, price, avatar })
       .returning("id");
     if (ingredients.length > 0) {
+      console.log(result);
+      console.log(ingredients);
       ingredients.forEach(async (ingredient) => {
         await db("ingredients").insert({
-          name: ingredient.name,
+          name: ingredient,
           product_id: result.id,
         });
       });

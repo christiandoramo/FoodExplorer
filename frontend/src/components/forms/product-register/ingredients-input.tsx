@@ -10,7 +10,6 @@ type ingredientType = z.infer<typeof ingredientSchema>;
 export const IngredientsInput: React.FC<FormIngredientsProps> = ({
   label,
   name,
-  register,
   error,
   setValue,
   getValues,
@@ -18,17 +17,18 @@ export const IngredientsInput: React.FC<FormIngredientsProps> = ({
   const [newIngredient, setNewIngredient] = useState<string>("");
 
   function handleAddIngredient() {
-    const ingredients = getValues(register.name) || [];
+    const ingredients = getValues(name);
+    console.log(ingredients);
     console.log(newIngredient);
     if (
-      ingredients.some((ingredient: any) => ingredient?.name === newIngredient)
+      ingredients.some(
+        (ingredient: ingredientType) => ingredient?.name === newIngredient
+      )
     ) {
       toast.warning(`Ingrediente ${newIngredient} já registrado`);
-      return;
-    }
-    if (newIngredient) {
+    } else if (newIngredient !== "") {
       setValue(
-        register.name,
+        name,
         [...ingredients, { name: newIngredient.trim(), amount: 1 }],
         { shouldValidate: true }
       );
@@ -36,11 +36,11 @@ export const IngredientsInput: React.FC<FormIngredientsProps> = ({
     }
   }
   function handleRemoveIngredient(ingredientToDelete: string) {
-    const ingredients = getValues(register.name);
+    const ingredients = getValues(name);
     const filteredIngredients = ingredients.filter(
       (ingredient: ingredientType) => ingredient.name !== ingredientToDelete
     );
-    setValue(register.name, filteredIngredients, { shouldValidate: true });
+    setValue(name, filteredIngredients, { shouldValidate: true });
   }
 
   return (
@@ -49,19 +49,17 @@ export const IngredientsInput: React.FC<FormIngredientsProps> = ({
         {label}
       </label>
       <IngredientsInputContainer className="bg-dark-900">
-        {getValues(register.name) &&
-          getValues(register.name).map(
-            (ingredient: ingredientType, index: number) => {
-              return (
-                <IngredientItem
-                  isnew={false}
-                  key={index}
-                  value={ingredient.name}
-                  onClick={() => handleRemoveIngredient(ingredient.name)}
-                />
-              );
-            }
-          )}
+        {getValues(name) &&
+          getValues(name).map((ingredient: ingredientType, index: number) => {
+            return (
+              <IngredientItem
+                isnew={false}
+                key={index}
+                value={ingredient.name}
+                onClick={() => handleRemoveIngredient(ingredient.name)}
+              />
+            );
+          })}
         <IngredientItem
           isnew
           value={newIngredient}

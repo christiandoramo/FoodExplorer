@@ -41,7 +41,7 @@ const productCreateSchema = z.object({
   name: z.string().min(2, "O nome é obrigatório"),
   category: z.string().min(3, "Selecione uma categoria"),
   description: z.string().min(1, "Insira alguma descrição"),
-  price: z.string().min(1, { message: "O preço é obrigatório" }), // Aqui garantimos que o valor será numérico, mas sem o "R$"
+  price: z.string().min(1, "O preço é obrigatório"), // Aqui garantimos que o valor será numérico, mas sem o "R$"
   file: z
     .instanceof(File, { message: "Insira a imagem do produto" }) //+conversationId":"fac3d0e0-08e8-4d2f-8817-07e45a0bf925","source":"instruct"}
     .refine((file) => {
@@ -69,7 +69,6 @@ export const ProductCreate: React.FC<any> = () => {
     },
   });
   const navigate = useNavigate();
-  // const [newIngredient, setNewIngredient] = useState<string>("");
   const [categories, setCategories] = useState<string[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null); // Estado para armazenar a imagem
 
@@ -81,49 +80,21 @@ export const ProductCreate: React.FC<any> = () => {
       setImagePreview(fileURL); // Atualizar o estado com a URL da imagem
     }
   }
-
-  // function handleAddIngredient() {
-  //   const ingredients = getValues("ingredients");
-  //   if (ingredients.some((ingredient) => ingredient.name === newIngredient)) {
-  //     toast.warning(`Ingrediente ${newIngredient} já registrado`);
-  //     return;
-  //   }
-  //   if (newIngredient) {
-  //     setValue(
-  //       "ingredients",
-  //       [...ingredients, { name: newIngredient.trim() }],
-  //       { shouldValidate: true }
-  //     );
-  //     setNewIngredient("");
-  //   }
-  // }
-  // function handleRemoveIngredient(ingredientToDelete: string) {
-  //   const ingredients = getValues("ingredients");
-  //   const filteredIngredients = ingredients.filter(
-  //     (ingredient) => ingredient.name !== ingredientToDelete
-  //   );
-  //   setValue("ingredients", filteredIngredients, { shouldValidate: true });
-  // }
-
   const createProduct = async (data: ProductRegisterData): Promise<void> => {
     const price = parseFloat(
       data.price.replace("R$", "").replace(",", ".").trim()
     );
-    console.log(data);
-
-    return;
-
     const formData = new FormData();
     const ingredients =
       data.ingredients.map((ingredient) => ingredient.name) || [];
-    formData.append("file", data.file);
+    formData.append("file", data.file, data.file.name);
     formData.append("name", data.name);
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("price", JSON.stringify(price)); // Converte o número para string antes de enviar
     formData.append("category", data.category);
     formData.append("description", data.description);
 
-    const createResponse = await productService.createProduct(data);
+    const createResponse = await productService.createProduct(formData);
     if (createResponse) {
       if (createResponse.status === 200 || createResponse.status === 201) {
         navigate("/");
@@ -186,27 +157,6 @@ export const ProductCreate: React.FC<any> = () => {
             getValues={getValues}
             setValue={setValue}
           />
-          {/* <IngredientContainer className="bg-dark-900">
-            <p className="text-light-100 small-regular">Ingredientes</p>
-            {getValues("ingredients") &&
-              getValues("ingredients").map((ingredient, index) => {
-                return (
-                  <IngredientItem
-                    isnew={false}
-                    key={index}
-                    value={ingredient.name}
-                    onClick={() => handleRemoveIngredient(ingredient.name)}
-                  />
-                );
-              })}
-            <IngredientItem
-              isnew
-              value={newIngredient}
-              placeholder="Adicionar"
-              onChange={(e) => setNewIngredient(e.target.value)}
-              onClick={handleAddIngredient}
-            />
-          </IngredientContainer> */}
           <PriceInput
             label="Preço"
             name="price"
