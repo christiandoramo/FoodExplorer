@@ -4,6 +4,7 @@ import { ProductsSearchService } from "../services/ProductsSearchService";
 import { ProductsRepository } from "../repositories/ProductsRepository";
 import { ProductsDeleteService } from "../services/ProductsDeleteService";
 import { ProductsCategoriesSearchService } from "../services/ProductsCategoriesSearch";
+import { ProductsUpdateService } from "../services/ProductsUpdateService";
 
 interface ProductRequest extends Request {
   file?: Express.Multer.File;
@@ -24,6 +25,30 @@ export class ProductsController {
       ingredients: JSON.parse(ingredients),
     });
     return response.status(201).json(newProduct);
+  }
+
+  async update(request: ProductRequest, response: Response) {
+    const { name, description, category, price } = request.body;
+    let { ingredients } = request.body;
+    const file = request?.file;
+    const { id } = request.params;
+
+    if (!!ingredients) {
+      ingredients = JSON.parse(ingredients ? ingredients : "[]");
+    }
+
+    const productsRepository = new ProductsRepository();
+    const productsUpdateService = new ProductsUpdateService(productsRepository);
+    const updatedId = await productsUpdateService.execute({
+      id,
+      name,
+      description,
+      category,
+      price,
+      file,
+      ingredients,
+    });
+    return response.status(201).json(updatedId);
   }
   async show(request: Request, response: Response) {
     const { id } = request.params;

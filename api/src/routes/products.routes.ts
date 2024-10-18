@@ -14,8 +14,14 @@ productsRoutes.post(
   ensureAuthorization,
   productsController.create
 );
+productsRoutes.patch(
+  "/update/:id",
+  upload.single("file"),
+  ensureAuthorization,
+  productsController.update
+);
 productsRoutes.delete(
-  "/delete:id",
+  "/delete/:id",
   ensureAuthorization,
   productsController.delete
 );

@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import { formatToBRL } from "../../utils/strings";
 
 export const ingredientSchema = z.object({
+  id: z.string().min(1, "O nome do ingrediente é obrigatório").optional(),
   name: z.string().min(1, "O nome do ingrediente é obrigatório"),
   amount: z.number().optional(),
 });
@@ -146,9 +147,18 @@ export const ProductEdit: React.FC<any> = () => {
 
     if (data?.ingredients) {
       if (data?.ingredients?.length > 0) {
-        const ingredients = data.ingredients.map(
-          (ingredient) => ingredient?.name || ingredient
-        );
+        const ingredients = data.ingredients.map((ingredient) => () => {
+          if (ingredient?.id) {
+            return {
+              id: ingredient?.id,
+              name: ingredient?.name || ingredient,
+            };
+          } else {
+            return {
+              name: ingredient?.name || ingredient,
+            };
+          }
+        });
         formData.append("ingredients", JSON.stringify(ingredients));
       } else {
         formData.append(

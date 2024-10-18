@@ -12,6 +12,16 @@ interface ProductData {
   ingredients: IngredientData[];
 }
 
+interface UpdateProductData {
+  id: string;
+  name?: string;
+  category?: PRODUCT_CATEGORY;
+  description?: string;
+  price?: number;
+  avatar?: string;
+  ingredients?: IngredientData[];
+}
+
 export class ProductsRepository {
   async create({
     name,
@@ -36,6 +46,7 @@ export class ProductsRepository {
     }
     return result.id;
   }
+
   async findProductsByNameAndIngredients({
     slug,
     offset,
@@ -311,5 +322,60 @@ export class ProductsRepository {
   async findAllCategories() {
     const categories = Object.values(PRODUCT_CATEGORY);
     return categories;
+  }
+
+  async update({
+    id,
+    name,
+    description,
+    category,
+    price,
+    avatar,
+    ingredients,
+  }: UpdateProductData) {
+    const [result] = await db("products")
+      .where({ id })
+      .update({
+        name,
+        description,
+        category,
+        price,
+        avatar,
+      })
+      .returning("id");
+
+    if (!!ingredients?.length) {
+      const foundIngredients = await db("ingredients").where({
+        product_id: id,
+      });
+      ingredients.forEach(async (ingredient) => {
+        if (!ingredient?.id) {
+          // insere novos ingredientes no banco
+          await db("ingredients").insert({
+            name: ingredient,
+            product_id: result.id,
+          });
+        }
+      });
+      // após isso os ingredientes não presentes para o produto devem ser apagados do banco
+      if (foundIngredients?.length) {
+        let toDeleteIngredients = foundIngredients;
+        for (const ingredient of ingredients) {
+          if (foundIngredients.some((ing) => ing?.id === ingredient?.id)) {
+            toDeleteIngredients = toDeleteIngredients.filter(
+              (ing) => ing.id !== ingredient.id
+            ); // só sobra os não presentes dos achados no banco
+            // logo resta deletar
+          }
+        }
+        await db("ingredients")
+          .whereIn(
+            "id",
+            toDeleteIngredients.map((ing) => ing.id)
+          )
+          .delete();
+      }
+    }
+    return result.id;
   }
 }
