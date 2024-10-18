@@ -46,7 +46,6 @@ export class SessionsController {
   async exit(request: ExtendedRequest, response: Response) {
     try {
       const authHeader = request.headers;
-      console.log(authHeader?.cookie);
       if (!authHeader || !authHeader?.cookie)
         throw new AppError("Sem autenticação 1", 401);
       const cookies = parse(authHeader.cookie);

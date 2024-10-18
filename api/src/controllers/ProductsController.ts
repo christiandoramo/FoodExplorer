@@ -33,8 +33,11 @@ export class ProductsController {
     const file = request?.file;
     const { id } = request.params;
 
-    if (!!ingredients) {
+    if (ingredients !== undefined) {
+      console.log("ingredients 1: ", ingredients);
+
       ingredients = JSON.parse(ingredients ? ingredients : "[]");
+      console.log("ingredients 2: ", ingredients);
     }
 
     const productsRepository = new ProductsRepository();

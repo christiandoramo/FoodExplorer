@@ -43,14 +43,9 @@ const productUpdateSchema = z.object({
   file: z
     .custom<File | undefined>(
       (value) => {
-        console.log("desgraca: ", value);
-
-        // Verifica se o valor é um FileList e pega o primeiro arquivo
-        const file = value instanceof FileList ? value[0] : value;
-
-        if (file === undefined || file instanceof File) {
-          return true; // Válido se for undefined ou File
-        }
+        if (value === undefined) return true;
+        if (value instanceof File) return true;
+        //  if (value instanceof FileList) return true;
         return false; // Inválido em outros casos
       },
       {
@@ -60,7 +55,7 @@ const productUpdateSchema = z.object({
     .optional() // Arquivo opcional
     .refine(
       (file) => {
-        const validFile = file instanceof FileList ? file[0] : file;
+        const validFile = file;
         return !validFile || validFile.size <= MAX_FILE_SIZE;
       },
       {
@@ -69,7 +64,7 @@ const productUpdateSchema = z.object({
     )
     .refine(
       (file) => {
-        const validFile = file instanceof FileList ? file[0] : file;
+        const validFile = file;
         return !validFile || ACCEPTED_IMAGE_TYPES.includes(validFile?.type);
       },
       {
@@ -107,25 +102,28 @@ export class ProductsUpdateService {
         ingredients,
       });
 
+      console.log("passou");
       const foundProduct = await this.productsRepository.findById(id);
       if (!foundProduct) throw new AppError("Produto não encontrado", 400);
 
       const filename = file?.filename || "";
       const diskStorage = new DiskStorage();
       const avatar = !!file
-        ? await diskStorage.saveFile(filename)
-        : foundProduct.avatar;
+        ? await diskStorage.saveFile(filename) // retorna o id do arquivo - avatar
+        : undefined;
 
-      foundProduct.avatar = avatar;
+      if (!!avatar) {
+        await diskStorage.deleteFile(foundProduct.avatar);
+      }
+
+      foundProduct.avatar = avatar || foundProduct.avatar;
       foundProduct.name = name || foundProduct.name;
       foundProduct.description =
         description?.trim() || foundProduct.description;
       foundProduct.category = category || foundProduct.category;
       foundProduct.price = price || foundProduct.price;
 
-      foundProduct.ingredients = Array.isArray(ingredients)
-        ? ingredients
-        : foundProduct.ingredients.length;
+      foundProduct.ingredients = Array.isArray(ingredients) ? ingredients : [];
 
       foundProduct.name = name || foundProduct.name;
 
@@ -135,7 +133,7 @@ export class ProductsUpdateService {
       if (error.errors?.length > 0)
         console.error(error.errors.map((err: any) => err.message).join(", "));
       else console.error(error);
-      throw new AppError("Insira dados válidos para registrar o produto", 400);
+      throw new AppError("Insira dados válidos para atualizar o produto", 400);
     }
   }
 }

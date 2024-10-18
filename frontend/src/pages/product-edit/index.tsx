@@ -4,6 +4,8 @@ import {
   EditNewDishButton,
   EditContainer,
   PageLabelContainer,
+  CancelSubmitButton,
+  SubmitContainer,
 } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -128,6 +130,18 @@ export const ProductEdit: React.FC<any> = () => {
   }
 
   const editProduct = async (data: ProductUpdateData): Promise<void> => {
+    let todosAtributosVazios = true;
+    for (const atr of Object.values(data)) {
+      if (!!atr !== undefined) {
+        todosAtributosVazios = false;
+        break;
+      }
+    }
+    if (!!todosAtributosVazios) {
+      toast.warning("Você não fez nenhuma alteração");
+      return;
+    }
+
     const formData = new FormData();
 
     if (!!data?.file) {
@@ -144,30 +158,11 @@ export const ProductEdit: React.FC<any> = () => {
     if (data?.name) {
       formData.append("name", data.name);
     }
-
     if (data?.ingredients) {
       if (data?.ingredients?.length > 0) {
-        const ingredients = data.ingredients.map((ingredient) => () => {
-          if (ingredient?.id) {
-            return {
-              id: ingredient?.id,
-              name: ingredient?.name || ingredient,
-            };
-          } else {
-            return {
-              name: ingredient?.name || ingredient,
-            };
-          }
-        });
-        formData.append("ingredients", JSON.stringify(ingredients));
-      } else {
-        formData.append(
-          "ingredients",
-          JSON.stringify(data.ingredients[0]?.name || data.ingredients[0])
-        );
+        formData.append("ingredients", JSON.stringify(data.ingredients));
       }
     }
-
     if (data?.category) {
       formData.append("category", data.category);
     }
@@ -177,17 +172,8 @@ export const ProductEdit: React.FC<any> = () => {
     }
     const editResponse = await productService.updateProduct(id, formData);
 
-    let atributosVazios = false;
-    for (const atr of Object.values(data)) {
-      if (!!atr !== undefined) {
-        atributosVazios = true;
-        break;
-      }
-    }
-    if (!!atributosVazios) {
-      toast.warning("voce nao fez nenhuma alteracao");
-      return;
-    }
+    console.log(editResponse);
+
     if (editResponse) {
       if (editResponse.status === 200 || editResponse.status === 201) {
         navigate("/");
@@ -270,12 +256,20 @@ export const ProductEdit: React.FC<any> = () => {
             error={errors.description}
             registerOptions={{ required: false }}
           />
-          <EditNewDishButton
-            className="bg-tints-tomato-100 text-light-100"
-            type="submit"
-          >
-            Criar prato
-          </EditNewDishButton>
+          <SubmitContainer>
+            <EditNewDishButton
+              className="bg-tints-tomato-100 text-light-100"
+              type="submit"
+            >
+              Editar prato
+            </EditNewDishButton>
+            <CancelSubmitButton
+              className="bg-dark-100 text-light-100"
+              onClick={() => navigate("/")}
+            >
+              Cancelar
+            </CancelSubmitButton>
+          </SubmitContainer>
         </EditContainer>
         <Footer />
       </Container>

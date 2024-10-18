@@ -50,7 +50,7 @@ class ProductService {
     try {
       const registerProductPromise = new Promise(async (resolve, reject) => {
         try {
-          const response = await api.patch(`products/${id}`, data, {
+          const response = await api.patch(`products/update/${id}`, data, {
             headers: { "Content-Type": "multipart/form-data" },
           });
           await new Promise((res) => setTimeout(res, 2000));
@@ -63,13 +63,13 @@ class ProductService {
       return toast.promise(registerProductPromise, {
         pending: {
           render() {
-            return `Registrando o produto`;
+            return `Atualizando o produto`;
           },
           theme: "dark",
         },
         success: {
           render() {
-            return `Novo produto criado com sucesso 👌`;
+            return `Produto atualizado com sucesso 👌`;
           },
         },
         error: {

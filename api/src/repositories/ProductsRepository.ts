@@ -348,15 +348,16 @@ export class ProductsRepository {
       const foundIngredients = await db("ingredients").where({
         product_id: id,
       });
-      ingredients.forEach(async (ingredient) => {
-        if (!ingredient?.id) {
-          // insere novos ingredientes no banco
-          await db("ingredients").insert({
-            name: ingredient,
-            product_id: result.id,
-          });
-        }
-      });
+      if (ingredients?.length > 0)
+        ingredients.forEach(async (ingredient) => {
+          if (!ingredient?.id) {
+            // insere novos ingredientes no banco
+            await db("ingredients").insert({
+              name: ingredient.name,
+              product_id: result.id,
+            });
+          }
+        });
       // após isso os ingredientes não presentes para o produto devem ser apagados do banco
       if (foundIngredients?.length) {
         let toDeleteIngredients = foundIngredients;
@@ -375,6 +376,16 @@ export class ProductsRepository {
           )
           .delete();
       }
+    } else {
+      const foundIngredients = await db("ingredients").where({
+        product_id: id,
+      });
+      await db("ingredients")
+        .whereIn(
+          "id",
+          foundIngredients.map((ing) => ing.id)
+        )
+        .delete();
     }
     return result.id;
   }

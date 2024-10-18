@@ -99,8 +99,33 @@ export const EditNewDishButton = styled.button`
   }
 `;
 
+export const CancelSubmitButton = styled.button`
+  width: 285px;
+  height: 48px;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: white;
+    color: black;
+    border: 2px solid red;
+  }
+  @media (max-width: 768px) {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
+`;
+
 export const IngredientContainer = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+`;
+
+export const SubmitContainer = styled.div`
+  width: auto;
+  display: flex;
+  gap: 10px;
 `;
