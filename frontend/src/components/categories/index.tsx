@@ -27,6 +27,7 @@ export const Categories: React.FC<any> = () => {
     async function getProductsCategorized() {
       if (location?.state?.searchTerm && location?.state?.products) {
         setProducts(location?.state?.products);
+        console.log("parte 1", location?.state?.products);
         setTimeout(() => {
           setIsLoading(false);
         }, 1500);
@@ -38,7 +39,21 @@ export const Categories: React.FC<any> = () => {
           offset: 0,
         }
       );
-      if (response) {
+      if (response?.length) {
+        console.log("parte 2", location?.state?.products);
+        // const locationProductIds = location.state.products
+        //   .flat() // Achatar a matriz para um único array de produtos
+        //   .map((product: Product) => product.id); // Mapear para um array de ids
+
+        // // Verificar se existe pelo menos um id diferente nos produtos retornados
+        // const hasDifferentIds = response.some((products) =>
+        //   products.some(
+        //     (product) => !locationProductIds.includes(product.id) // Verifica se o id não está presente
+        //   )
+        // );
+
+        // if (!!hasDifferentIds) {
+        console.log("response: ", response);
         location.state = {
           products: response,
           searchTerm: "",
@@ -48,8 +63,22 @@ export const Categories: React.FC<any> = () => {
           setIsLoading(false);
         }, 1500);
       }
+      //}
     }
     getProductsCategorized();
+  }, []);
+
+  useEffect(() => {
+    const loadProducts = () => {
+      if (!!location?.state?.products) {
+        setIsLoading(true);
+        setProducts(location?.state?.products);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1500);
+      }
+    };
+    loadProducts();
   }, [location.state]);
 
   return (
@@ -60,18 +89,16 @@ export const Categories: React.FC<any> = () => {
             <>
               <Skeleton
                 height={58}
-                className="text-light-100"
+                className="skeleton category"
                 variant="text"
-                width="20%"
                 sx={{ bgcolor: getRandomColor() }}
               />
               <div style={{ display: "flex", gap: "10px", flexWrap: "nowrap" }}>
                 {arrayOfMatrixPlaceholder.map(() => (
                   <Skeleton
+                    className="skeleton items"
                     sx={{ bgcolor: getRandomColor() }}
                     variant="rectangular"
-                    height={462}
-                    width={304}
                   />
                 ))}
               </div>

@@ -9,4 +9,22 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: transparent !important;
   padding: 58px 0;
+
+  .skeleton.category {
+    width: 20%;
+    display: flex;
+    flex-wrap: nowrap;
+
+    @media (max-width: 768px) {
+    }
+  }
+  .skeleton.items {
+    height: 462px;
+    width: 304px;
+    display: flex;
+    flex-wrap: nowrap;
+
+    @media (max-width: 768px) {
+    }
+  }
 `;
