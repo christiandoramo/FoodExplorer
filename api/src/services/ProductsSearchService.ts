@@ -37,11 +37,13 @@ export class ProductsSearchService {
     try {
       schema.parse({ slug, offset, limit });
       const products =
-        await this.productsRepository.findProductsByNameAndIngredients({
-          slug: slug,
-          offset: offset,
-          limit: limit,
-        });
+        await this.productsRepository.findCategorizedProductsByNameAndIngredients(
+          {
+            slug: slug,
+            offset: offset,
+            limit: limit,
+          }
+        );
       return products;
     } catch (error: any) {
       console.error(error.errors.map((err: any) => err.message).join(", "));
@@ -76,8 +78,13 @@ export class ProductsSearchService {
       limit: z.number().optional(),
       offset: z.number().optional(),
     });
+
+    limit = limit && limit > 0 && limit <= 100 ? limit : 10;
+    offset = offset && offset >= 0 ? offset : 0;
+
     try {
       schema.parse({ limit, offset });
+
       const categorizedProducts =
         await this.productsRepository.findCategorizedProducts({
           limit,

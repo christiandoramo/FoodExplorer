@@ -60,7 +60,7 @@ export class ProductsRepository {
       slug = !slug ? "" : slug;
       limit = limit && limit > 0 && limit <= 100 ? limit : 10;
       offset = offset && offset >= 0 ? offset : 0;
-      if (slug === "" || !!slug) {
+      if (slug === "" || !slug) {
         const allProducts = await db("products")
           .orderBy("price", "asc")
           .limit(limit)
@@ -104,10 +104,10 @@ export class ProductsRepository {
           });
 
         // retorna array vazio caso não ache nada em produtos e nem em ingredientes
-        if (!ingredientsByName?.length && !productsByName.length) return [];
-
-        // Obter os IDs únicos dos produtos encontrados
-
+        if (!ingredientsByName?.length && !productsByName?.length) {
+          console.log("entrou aki");
+          return [];
+        }
         //inicia com os ids de cada product achado pelo name em productIds
         const productIds = new Set(productsByName.map((product) => product.id));
 
@@ -118,12 +118,10 @@ export class ProductsRepository {
 
         // Buscar todos os produtos e ingredientes associados aos IDs encontrados
         products = await db("products")
+          .whereIn("id", Array.from(productIds))
           .orderBy("price", "asc")
           .limit(limit)
-          .offset(offset)
-          .select("*")
-          .whereIn("id", Array.from(productIds))
-          .orderBy("price", "asc");
+          .offset(offset);
 
         allIngredients = await db("ingredients")
           .select("*")
@@ -388,5 +386,100 @@ export class ProductsRepository {
         .delete();
     }
     return result.id;
+  }
+
+  async findCategorizedProductsByNameAndIngredients({
+    slug,
+    offset,
+    limit,
+  }: {
+    slug?: string;
+    offset?: number;
+    limit?: number;
+  }) {
+    try {
+      slug = !slug ? "" : slug;
+      limit = limit && limit > 0 && limit <= 100 ? limit : 10;
+      offset = offset && offset >= 0 ? offset : 0;
+
+      // Se não houver slug, retorne um array vazio
+      if (!slug) {
+        return [];
+      }
+
+      const searchTerms = slug
+        .trim()
+        .split(" ")
+        .filter((term) => term !== "");
+
+      // Buscar produtos cujos nomes correspondem aos termos de busca
+      const productsByName = await db("products")
+        .select("*")
+        .where(function () {
+          searchTerms.forEach((term) => {
+            this.orWhereILike("name", `%${term}%`);
+          });
+        });
+
+      // Buscar ingredientes cujos nomes correspondem aos termos de busca
+      const ingredientsByName = await db("ingredients")
+        .select("*")
+        .where(function () {
+          searchTerms.forEach((term) => {
+            this.orWhereILike("name", `%${term}%`);
+          });
+        });
+
+      // Se nenhum produto ou ingrediente for encontrado, retorne um array vazio
+      if (!productsByName?.length && !ingredientsByName?.length) {
+        return [];
+      }
+
+      // Obter IDs dos produtos encontrados diretamente e via ingredientes
+      const productIds = new Set(productsByName.map((product) => product.id));
+      ingredientsByName.forEach((ingredient) => {
+        productIds.add(ingredient.product_id);
+      });
+
+      // Buscar todos os produtos e ingredientes associados aos IDs encontrados
+      const products = await db("products")
+        .whereIn("id", Array.from(productIds))
+        .orderBy("price", "asc")
+        .limit(limit)
+        .offset(offset);
+
+      const allIngredients = await db("ingredients").whereIn(
+        "product_id",
+        Array.from(productIds)
+      );
+
+      // Categorizar os produtos
+      const categorizedProducts: Record<string, any[]> = {};
+
+      for (const product of products) {
+        const categoryName = product.category;
+
+        const productIngredients = allIngredients.filter(
+          (ingredient) => ingredient.product_id === product.id
+        );
+
+        const productWithIngredients = {
+          ...product,
+          ingredients: productIngredients,
+        };
+
+        // Agrupar produtos por categoria
+        if (!categorizedProducts[categoryName]) {
+          categorizedProducts[categoryName] = [];
+        }
+        categorizedProducts[categoryName].push(productWithIngredients);
+      }
+
+      // Retornar os produtos categorizados
+      return Object.values(categorizedProducts);
+    } catch (error) {
+      console.error("Erro ao buscar produtos categorizados:", error);
+      throw error;
+    }
   }
 }

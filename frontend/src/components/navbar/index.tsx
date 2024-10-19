@@ -17,11 +17,16 @@ import { Logo } from "../logo";
 import { useAuth } from "../../contexts/auth";
 import { List, Receipt, X } from "@phosphor-icons/react";
 import { useMediaQuery } from "react-responsive";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { productService } from "../../services/products";
 
 export const Navbar: React.FC<any> = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const location = useLocation();
+
+  const [searchTerm, setSearchTerm] = useState<string>(
+    location?.state?.searchTerm || ""
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const nav = useNavigate();
 
@@ -30,6 +35,13 @@ export const Navbar: React.FC<any> = () => {
   }); // detectando se é celular - se a tela é até 768 ou se o ponteiro é touchscreen
 
   const { signOut, user } = useAuth();
+
+  const handleSearch = async () => {
+    const foundProducts = await productService.getProductsBySlug({
+      slug: searchTerm,
+    });
+    nav("/", { state: { products: foundProducts, searchTerm } }); // jogando no state da rota em useLocation
+  };
 
   const handleExpandInput = () => {
     setIsExpanded(true);
@@ -68,6 +80,7 @@ export const Navbar: React.FC<any> = () => {
           size={20}
           className={"text-light-400"}
           cursor={!!searchTerm ? "pointer" : "auto"}
+          onClick={() => handleSearch()}
         />
         <SearchInput
           expanded={isExpanded || !!searchTerm}
@@ -78,23 +91,26 @@ export const Navbar: React.FC<any> = () => {
           }}
           onClick={handleExpandInput}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={async (event) => {
+            if (event.key === "Enter") await handleSearch();
+          }}
         />
       </SearchBar>
       <NoBackgroundButton
         className="medium-100 text-light-100"
         onClick={handleGotoFavorites}
       >
-        {user.role === USER_ROLES.DEFAULT ? `Meus favoritos` : `Favoritos`}
+        {user?.role === USER_ROLES.DEFAULT ? `Meus favoritos` : `Favoritos`}
       </NoBackgroundButton>
       <NoBackgroundButton
         className="medium-100 text-light-100"
         onClick={
-          user.role === USER_ROLES.DEFAULT
+          user?.role === USER_ROLES.DEFAULT
             ? handleGotoOrders
             : handleGotoNewDish
         }
       >
-        {user.role === USER_ROLES.DEFAULT
+        {user?.role === USER_ROLES.DEFAULT
           ? `Histórico de pedidos`
           : `Novo prato`}
       </NoBackgroundButton>

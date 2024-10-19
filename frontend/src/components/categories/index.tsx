@@ -6,8 +6,11 @@ import { Row } from "./row";
 import { useAuth } from "../../contexts/auth";
 import { Skeleton } from "@mui/material";
 import { getRandomColor } from "../../utils/randomics";
+import { useLocation } from "react-router-dom";
 
 export const Categories: React.FC<any> = () => {
+  const location = useLocation();
+
   const [products, setProducts] = useState<Product[][]>([]);
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +25,13 @@ export const Categories: React.FC<any> = () => {
 
   useEffect(() => {
     async function getProductsCategorized() {
+      if (location?.state?.searchTerm && location?.state?.products) {
+        setProducts(location?.state?.products);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1500);
+        return;
+      }
       const response: Product[][] = await productService.getProductsCategorized(
         {
           limit: 100,
@@ -29,14 +39,18 @@ export const Categories: React.FC<any> = () => {
         }
       );
       if (response) {
+        location.state = {
+          products: response,
+          searchTerm: "",
+        };
         setProducts(response);
         setTimeout(() => {
           setIsLoading(false);
-        }, 2000);
+        }, 1500);
       }
     }
     getProductsCategorized();
-  }, []);
+  }, [location.state]);
 
   return (
     <Container>

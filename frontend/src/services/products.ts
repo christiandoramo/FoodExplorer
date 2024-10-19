@@ -141,7 +141,7 @@ class ProductService {
   }: {
     limit?: number;
     offset?: number;
-    slug?: string;
+    slug: string;
   }): Promise<Product[]> {
     try {
       const response = await api.get(

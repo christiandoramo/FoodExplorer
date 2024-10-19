@@ -83,9 +83,11 @@ export class ProductsController {
       return response.status(201).json(productsByCategory);
     }
     // trás todos se não tiver nenhuma query como slug ou category
+    console.log({ limit, offset });
+
     const products = await productsSearchService.findCategorized({
-      limit: Number(limit),
-      offset: Number(offset),
+      limit: Number(limit) || undefined,
+      offset: Number(limit) || undefined,
     });
     return response.status(201).json(products);
   }

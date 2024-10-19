@@ -13,7 +13,12 @@ const App = () => {
           <AppRoutes />
         </AuthProvider>
       </BrowserRouter>
-      <ToastContainer />
+      <ToastContainer
+        newestOnTop={true}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+        position="bottom-center"
+      />
     </>
   );
 };
