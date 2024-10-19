@@ -8,6 +8,7 @@ import {
   Menu,
   IconButton,
   Overlay,
+  OrdersIconButton,
 } from "./styles";
 import { Hexagon } from "@phosphor-icons/react/dist/icons/Hexagon";
 import { MagnifyingGlass } from "@phosphor-icons/react/dist/icons/MagnifyingGlass";
@@ -17,17 +18,17 @@ import { Logo } from "../logo";
 import { useAuth } from "../../contexts/auth";
 import { List, Receipt, X } from "@phosphor-icons/react";
 import { useMediaQuery } from "react-responsive";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { productService } from "../../services/products";
 
 export const Navbar: React.FC<any> = () => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const location = useLocation();
 
-  const [searchTerm, setSearchTerm] = useState<string>(
-    location?.state?.searchTerm || ""
-  );
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState<boolean | null>(null);
+  const [isClosing, setClosing] = useState(false);
+
   const nav = useNavigate();
 
   const isMobile = useMediaQuery({
@@ -40,7 +41,8 @@ export const Navbar: React.FC<any> = () => {
     const foundProducts = await productService.getProductsBySlug({
       slug: searchTerm,
     });
-    nav("/", { state: { products: foundProducts, searchTerm } }); // jogando no state da rota em useLocation
+    nav("/", { state: { products: foundProducts } }); // jogando no state da rota em useLocation
+    toggleMenu();
   };
 
   const handleExpandInput = () => {
@@ -60,11 +62,30 @@ export const Navbar: React.FC<any> = () => {
     // usuario comum vê seus favoritos
   };
   const handleGotoNewDish = () => {
+    toggleMenu();
     nav("/product-create");
   };
 
   const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+    if (menuOpen) {
+      setSearchTerm("");
+      handleBlurInput();
+      setIsAnimating(true);
+      setClosing(true);
+      setTimeout(() => {
+        setClosing(false);
+        setMenuOpen(false);
+        setIsAnimating(false);
+      }, 660);
+    } else {
+      setSearchTerm("");
+      setIsAnimating(true);
+      setClosing(false);
+      setTimeout(() => {
+        setMenuOpen(true);
+        setIsAnimating(false);
+      }, 660);
+    }
   };
 
   const renderMenuContent = () => (
@@ -92,7 +113,9 @@ export const Navbar: React.FC<any> = () => {
           onClick={handleExpandInput}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={async (event) => {
-            if (event.key === "Enter") await handleSearch();
+            if (event.key === "Enter") {
+              await handleSearch();
+            }
           }}
         />
       </SearchBar>
@@ -125,7 +148,7 @@ export const Navbar: React.FC<any> = () => {
       <SignOut
         onClick={signOut}
         display={"block"}
-        size={48}
+        size={32}
         className="text-light-100"
         cursor={"pointer"}
       />
@@ -137,7 +160,7 @@ export const Navbar: React.FC<any> = () => {
       <Container className="bg-dark-600">
         {isMobile && (
           <IconButton
-            isOpen={menuOpen}
+            isAnimating={isAnimating}
             className="medium-100 text-light-100"
             onClick={toggleMenu}
           >
@@ -164,12 +187,16 @@ export const Navbar: React.FC<any> = () => {
 
         {isMobile && (
           <>
-            <IconButton isOpen={menuOpen} onClick={handleGotoOrders}>
+            <OrdersIconButton onClick={handleGotoOrders}>
               <Receipt size={32} />
-            </IconButton>
+            </OrdersIconButton>
             {menuOpen && (
               <Overlay isOpen={menuOpen}>
-                <Menu isOpen={menuOpen} className="bg-home">
+                <Menu
+                  isAnimating={isAnimating}
+                  isClosing={isClosing}
+                  className="bg-home"
+                >
                   <X size={32} color="white" onClick={toggleMenu} />
                   {renderMenuContent()}
                 </Menu>

@@ -25,7 +25,7 @@ export const Categories: React.FC<any> = () => {
 
   useEffect(() => {
     async function getProductsCategorized() {
-      if (location?.state?.searchTerm && location?.state?.products) {
+      if (location?.state?.products) {
         setProducts(location?.state?.products);
         console.log("parte 1", location?.state?.products);
         setTimeout(() => {
@@ -40,30 +40,14 @@ export const Categories: React.FC<any> = () => {
         }
       );
       if (response?.length) {
-        console.log("parte 2", location?.state?.products);
-        // const locationProductIds = location.state.products
-        //   .flat() // Achatar a matriz para um único array de produtos
-        //   .map((product: Product) => product.id); // Mapear para um array de ids
-
-        // // Verificar se existe pelo menos um id diferente nos produtos retornados
-        // const hasDifferentIds = response.some((products) =>
-        //   products.some(
-        //     (product) => !locationProductIds.includes(product.id) // Verifica se o id não está presente
-        //   )
-        // );
-
-        // if (!!hasDifferentIds) {
-        console.log("response: ", response);
         location.state = {
           products: response,
-          searchTerm: "",
         };
         setProducts(response);
         setTimeout(() => {
           setIsLoading(false);
         }, 1500);
       }
-      //}
     }
     getProductsCategorized();
   }, []);

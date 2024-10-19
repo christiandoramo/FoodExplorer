@@ -3,7 +3,7 @@ import { Product } from "../../../interfaces/product";
 import { capitalizeFirstLetter } from "../../../utils/strings";
 import { CarouselContainer, CarouselInner, Container } from "./styles";
 import { Card } from "./card";
-import { ArrowLeft, ArrowRight } from "@phosphor-icons/react";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 
 interface CarouselProps {
   productsByCategory: Product[];
@@ -78,9 +78,6 @@ export const Row: React.FC<CarouselProps> = ({ productsByCategory, user }) => {
         {capitalizeFirstLetter(productsByCategory[0].category)}
       </h2>
       <div className="row-container">
-        <button onClick={handlePrevClick}>
-          <ArrowLeft />
-        </button>
         <CarouselContainer
           ref={containerRef}
           onMouseDown={handleMouseDown}
@@ -91,15 +88,24 @@ export const Row: React.FC<CarouselProps> = ({ productsByCategory, user }) => {
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
         >
+          <CaretLeft
+            className="text-light-100 arrowLeft"
+            onClick={handlePrevClick}
+            cursor={"pointer"}
+            size={40}
+          />
           <CarouselInner offset={offset}>
             {productsByCategory.map((product, index) => (
               <Card product={product} user={user} key={index} />
             ))}
           </CarouselInner>
+          <CaretRight
+            className="text-light-100 arrowRight"
+            onClick={handleNextClick}
+            cursor={"pointer"}
+            size={40}
+          />
         </CarouselContainer>
-        <button onClick={handleNextClick}>
-          <ArrowRight />
-        </button>
       </div>
     </Container>
   );

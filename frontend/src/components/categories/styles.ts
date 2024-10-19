@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 1120px;
+  width: 80%;
   display: flex;
   gap: 32px;
   justify-content: justify-between;
   align-items: start;
   flex-direction: column;
   background-color: transparent !important;
-  padding: 58px 0;
+  padding: 58px 0 58px;
 
   .skeleton.category {
     width: 20%;

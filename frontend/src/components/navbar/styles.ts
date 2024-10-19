@@ -100,6 +100,17 @@ export const NoBackgroundButton = styled.button`
     width: 100%; /* Largura total em dispositivos móveis */
   }
 `;
+export const OrdersIconButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  @media (min-width: 769px) {
+    display: none;
+  }
+`;
 
 export const Overlay = styled.div<{ isOpen: boolean }>`
   position: fixed;
@@ -116,26 +127,35 @@ export const Overlay = styled.div<{ isOpen: boolean }>`
   transition: opacity 0.66s ease;
 `;
 
-export const Menu = styled.div<{ isOpen: boolean }>`
+export const Menu = styled.div<{
+  isAnimating: boolean | null;
+  isClosing: boolean;
+}>`
   display: flex;
   flex-direction: column;
   padding: 20px;
   gap: 20px;
-  animation: ${({ isOpen }) => (isOpen ? slideIn : slideOut)} 0.66s forwards;
+  animation: ${({ isAnimating, isClosing }) =>
+      isAnimating !== null ? (isClosing ? slideOut : slideIn) : "none"}
+    0.66s forwards;
+
+  transition: transform 0.66s ease-in-out;
+
   height: 100%;
 `;
 
-export const IconButton = styled.button<{ isOpen: boolean }>`
+export const IconButton = styled.button<{ isAnimating: boolean | null }>`
   background: none;
   border: none;
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: transform 0.66s ease;
+  transition: transform 0.66s ease-in-out;
 
-  // Aplicando a animação de rotação
-  animation: ${({ isOpen }) => (isOpen ? rotate : "none")} 0.66s forwards;
+  animation: ${({ isAnimating }) =>
+      isAnimating !== null ? (isAnimating ? rotate : deRotate) : "none"}
+    0.66s forwards;
 
   @media (min-width: 769px) {
     display: none;
@@ -147,7 +167,16 @@ const rotate = keyframes`
     transform: rotate(0deg);
   }
   to {
-    transform: rotate(180deg);
+    transform: rotate(36000deg);
+  }
+`;
+
+const deRotate = keyframes`
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
   }
 `;
 

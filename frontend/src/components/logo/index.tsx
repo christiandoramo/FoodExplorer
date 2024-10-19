@@ -4,18 +4,22 @@ import { LogoContainer } from "./styles";
 
 export const Logo: React.FC<any> = ({
   user,
-  isLp, // Lp = lading page (ou página de login/criar conta)
+  isLp,
+  isMobile, // Lp = lading page (ou página de login/criar conta)
 }: {
   user?: User;
   isLp?: boolean;
+  isMobile?: boolean;
 }) => {
   return (
     <LogoContainer>
       <div className="logo-image">
         <Hexagon
           weight="fill"
-          size={!!isLp ? 43 : 30}
-          className="text-tints-cake-100"
+          size={!!isLp ? 43 : !!isMobile ? 24 : 30}
+          className={
+            !!isMobile && !isLp ? "text-light-700" : "text-tints-cake-100"
+          }
         />
       </div>
       <div className="logo-text">
