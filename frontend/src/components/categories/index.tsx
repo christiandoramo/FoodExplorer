@@ -76,10 +76,10 @@ export const Categories: React.FC<any> = () => {
                 variant="text"
                 sx={{ bgcolor: getRandomColor() }}
               />
-              <div style={{ display: "flex", gap: "10px", flexWrap: "nowrap" }}>
+              <div className="skeleton items-container">
                 {arrayOfMatrixPlaceholder.map(() => (
                   <Skeleton
-                    className="skeleton items"
+                    className="skeleton item"
                     sx={{ bgcolor: getRandomColor() }}
                     variant="rectangular"
                   />

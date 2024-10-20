@@ -34,13 +34,21 @@ export const Container = styled.div`
     // Gradiente da esquerda
     &::before {
       left: 0;
-      background: linear-gradient(to right, rgba(0, 0, 0, 1), transparent);
+      background: linear-gradient(
+        to right,
+        rgba(0, 10, 15, 0.8),
+        rgba(0, 10, 15, 0)
+      );
     }
 
     // Gradiente da direita
     &::after {
       right: 0;
-      background: linear-gradient(to left, rgba(0, 0, 0, 0.88), transparent);
+      background: linear-gradient(
+        to left,
+        rgba(0, 10, 15, 0.8),
+        rgba(0, 10, 15, 0)
+      );
     }
   }
 

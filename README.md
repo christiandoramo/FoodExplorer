@@ -148,8 +148,8 @@ npx create-next-app nome-do-seu-projeto
 
 docker stop $(docker ps -aq) &&
 docker rm $(docker ps -aq) &&
-docker-compose down -v &&
+docker compose down -v &&
 docker volume prune -f &&
-docker-compose up --build
+docker compose up -d
 
 npx knex migrate:latest --knexfile src/database/knexfile.ts

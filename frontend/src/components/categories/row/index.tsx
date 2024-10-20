@@ -16,8 +16,8 @@ export const Row: React.FC<CarouselProps> = ({ productsByCategory, user }) => {
   const startX = useRef(0);
   const dragging = useRef(false);
 
-  const cardWidth = 300; // Ajuste conforme a largura real do card
-  const gap = 16;
+  const cardWidth = 304;
+  const gap = 15;
 
   const handlePrevClick = () => {
     const newOffset = Math.max(offset - (cardWidth + gap), 0);

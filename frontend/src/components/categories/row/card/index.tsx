@@ -1,12 +1,16 @@
 import {
-  CaretRight,
   HeartStraight,
   Minus,
   PencilSimple,
   Plus,
 } from "@phosphor-icons/react";
 import { Product } from "../../../../interfaces/product";
-import { Container, SecundaryActionComponent, Thumbnail } from "./styles";
+import {
+  Container,
+  IncludeButton,
+  SecundaryActionComponent,
+  Thumbnail,
+} from "./styles";
 import { USER_ROLES } from "../../../../enums/users";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -68,15 +72,22 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
           />
         )}
       </SecundaryActionComponent>
-      <div>
-        {product.name}
-        <CaretRight cursor={"pointer"} onClick={onCardClick} size={32} />
+      <div
+        onClick={onCardClick}
+        className="name-container text-light-300 bold-300"
+      >
+        {product.name + " >"}
       </div>
-      <div>{product.description}</div>
-      <div>{formatToBRL((product.price * toInclude).toString())}</div>
+      <div className="description-container smallest-regular text-light-400">
+        {product.description}
+      </div>
+      <div className="price-container biggest-regular text-tints-cake-200">
+        {formatToBRL((product.price * toInclude).toString())}
+      </div>
       {user?.role === USER_ROLES.DEFAULT && (
-        <div>
+        <div className="include-container">
           <Minus
+            className="text-light-300"
             onClick={() =>
               setToInclude((prev: number) => {
                 if (prev > 1) return prev - 1;
@@ -86,8 +97,9 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
             cursor={"pointer"}
             size={32}
           />
-          <div>{formatToAmount(toInclude)}</div>
+          <div className="text-light-300">{formatToAmount(toInclude)}</div>
           <Plus
+            className="text-light-300"
             onClick={() =>
               setToInclude((prev: number) => {
                 if (
@@ -101,8 +113,8 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
             cursor={"pointer"}
             size={32}
           />
-          <div
-            style={{ cursor: "pointer" }}
+          <IncludeButton
+            className="bg-tints-tomato-100 text-light-300"
             onClick={() =>
               CartService.addMultiplesToCart({
                 productId: product.id,
@@ -111,8 +123,8 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
               })
             }
           >
-            Incluir
-          </div>
+            incluir
+          </IncludeButton>
         </div>
       )}
     </Container>

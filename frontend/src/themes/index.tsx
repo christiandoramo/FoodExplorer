@@ -12,6 +12,24 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     letter-spacing: 0;
     paragraph-spacing: 0;
+    scrollbar-width: 1px;
+    scrollbar-color: black;
+    scrollbar-gutter: stable;
+  }
+    
+  *::-webkit-scrollbar {
+    width: 1px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: black;
+  }
+  button, a {
+    cursor: pointer;
+    transition: filter 0.2s;
+  }
+  button:hover, a:hover {
+    filter: brightness(0.9);
   }
   .roboto{
     font-family: 'Roboto', sans-serif;

@@ -18,13 +18,20 @@ export const Container = styled.div`
     @media (max-width: 768px) {
     }
   }
-  .skeleton.items {
+  .skeleton.item {
     height: 462px;
     width: 304px;
     display: flex;
+    flex-shrink: 0;
+  }
+  .skeleton.items-container {
+    display: flex;
+    gap: 10px;
     flex-wrap: nowrap;
+    width: 100%;
+    overflow-x: scroll;
+  }
 
-    @media (max-width: 768px) {
-    }
+  @media (max-width: 768px) {
   }
 `;
