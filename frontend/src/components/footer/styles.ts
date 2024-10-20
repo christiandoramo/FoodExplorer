@@ -13,7 +13,6 @@ export const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    // gap: 0;
   }
 
   @media (max-width: 1024px) and (orientation: landscape) {

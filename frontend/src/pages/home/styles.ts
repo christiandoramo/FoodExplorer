@@ -5,13 +5,7 @@ export const Container = styled.div`
   height: auto;
   min-height: 100dvh;
   display: flex;
-  // justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  // .titletext {
-  //   font-size: 2em !important;
-  // }
-  // .subtext {
-  //   font-size: 1.5em !important;
-  // }
 `;

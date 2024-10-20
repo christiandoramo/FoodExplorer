@@ -1,6 +1,58 @@
 # Food Explorer
 
-## Meus requisitos levantados para o projeto:
+## Instruções de como rodar:
+
+### Front end
+
+Dependências:
+
+- Ter .env como no .env.example do frontend
+- Ter node.js 20 ou superior instalado
+
+- exemplo de configurações .env da pasta frontend (em um arquivo .env como em .env.example):
+  - VITE_BACKEND_NODE_HOST=http://localhost:8080
+
+Para rodar:
+
+- rodar o backend previamente
+- cd frontend (ir para a pasta frontend)
+- npm install --legacy-peer-deps
+- npm run dev
+
+### Back end
+
+Dependências:
+
+- Ter node.js 20 ou superior instalado
+- Criar .env como no .env.example da pasta api (não precisa do DATABASE_URL_PROD para em desenvolvimento)
+- Ter docker e docker compose instalado (Não obrigatório)
+  - Caso não possua docker e docker compose, criar banco de dados postgres manualmente com as configurações do .env.example
+
+Para rodar:
+
+- rodar o banco de dados (docker compose up -d, ou no docker desktop, ou rodar banco manualmente)
+- cd api (ir para pasta api)
+- npm install
+- npm run dev
+
+obs:
+
+- Para o banco de dados: no windows o docker e docker compose pode ser usado instalando ubuntu da microsoft store e integrando ao wsl 2 (precisa ser instalado) dentro do docker desktop
+- Para o banco de dados: Também pode ser iniciado um banco postgres diretamente com as configurações
+
+- exemplo de configurações .env na pasta api (em um arquivo .env como em .env.example):
+
+  - SERVER_PORT=8080
+  - AUTH_SECRET=dadadasdsdsadsadada3
+  - REFRESH_SECRET=asdasdsadasds3
+  - (deve ser o mesmo no banco Postgres criado manualmente) POSTGRES_PASSWORD=senha
+  - (deve ser o mesmo no banco Postgres criado manualmente) POSTGRES_USER=root
+  - (deve ser o mesmo no banco Postgres criado manualmente) POSTGRES_DB=foodexplorer-database
+  - (deve ser o mesmo no banco Postgres criado manualmente) HOST=localhost
+  - DATABASE_URL_PROD=XXXXX
+  - NODE_ENV=development
+
+## Meus requisitos levantados para o projeto (misturado com milha extra - ainda não implementado):
 
 ### Usuário não autenticado
 
@@ -57,38 +109,7 @@
 
 #### REQUISITOS DO PROJETO: https://app.rocketseat.com.br/explorer/final-challenge
 
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json", "./tsconfig.node.json"],
-    tsconfigRootDir: __dirname,
-  },
-};
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
-anotações:
+anotações pessoaos durante o projeto:
 
 // Para rodar o knex ->
 // npm install knex --save
