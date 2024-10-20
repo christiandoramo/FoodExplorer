@@ -27,10 +27,6 @@ export const Categories: React.FC<any> = () => {
     async function getProductsCategorized() {
       if (location?.state?.products) {
         setProducts(location?.state?.products);
-        console.log("parte 1", location?.state?.products);
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1500);
         return;
       }
       const response: Product[][] = await productService.getProductsCategorized(
@@ -44,6 +40,9 @@ export const Categories: React.FC<any> = () => {
           products: response,
         };
         setProducts(response);
+      }
+
+      if (!!isLoading) {
         setTimeout(() => {
           setIsLoading(false);
         }, 1500);

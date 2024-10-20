@@ -88,7 +88,10 @@ export class ProductsCreateService {
       if (error.errors?.length > 0)
         console.error(error.errors.map((err: any) => err.message).join(", "));
       else console.error(error);
-      throw new AppError("Insira dados válidos para registrar o produto", 400);
+      throw new AppError(
+        "Dados inválidos, ou Upload de imagem indisponível em produção",
+        400
+      );
     }
   }
 }
