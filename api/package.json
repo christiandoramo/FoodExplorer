@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc --build --clean && tsc --build",
     "dev": "nodemon ./src/server.ts",
-    "start": "node ./dist/js/server.js",
+    "start": "mkdir -p dist/public/uploads && mkdir -p dist/temp && node ./dist/js/server.js",
     "migrate:deploy": "npx knex --knexfile=./src/database/knexfile.ts migrate:latest"
   },
   "repository": {

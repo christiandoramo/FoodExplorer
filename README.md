@@ -4,6 +4,8 @@
 
 ### Front end
 
+url: https://foodexplorer-ily5.onrender.com (pode haver problemas durante uploads)
+
 Dependências:
 
 - Ter .env como no .env.example do frontend
@@ -20,6 +22,8 @@ Para rodar:
 - npm run dev
 
 ### Back end
+
+url: https://fudexplorer.netlify.app/ (pode haver problemas durante uploads)
 
 Dependências:
 
