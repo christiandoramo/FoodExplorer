@@ -28,7 +28,7 @@ class CartService {
     if (!cartItem) {
       cart.set(productId, { id: productId, amount, name });
       localStorage.setItem(this.CART_KEY, JSON.stringify([...cart]));
-      toast.success(`${name} adicionado ${amount}`);
+      toast.success(`${amount}x ${name} adicionado(s)`);
     } else if (!!cartItem && cartItem.amount + amount < 99) {
       cart.set(productId, {
         id: productId,
@@ -36,9 +36,9 @@ class CartService {
         name,
       });
       localStorage.setItem(this.CART_KEY, JSON.stringify([...cart]));
-      toast.success(`${cartItem.name} adicionado ${amount}`);
+      toast.success(`${amount}x ${cartItem.name} adicionado(s)`);
     } else {
-      toast.warning(`${cartItem.name} adicionado 99x`);
+      toast.warning(`${cartItem.name} adicionado(s) 99x`);
     }
   }
   public static getCartItems(): CartMap {
@@ -51,7 +51,7 @@ class CartService {
     if (!!cart) return cart.get(productId) || null;
     return null;
   }
-  // Retorna o número de vezes que um produto específico foi adicionado ao carrinho
+
   public static getProductAmount(productId: string): number {
     const cart = this.getCartItems();
     const amount = cart.get(productId)?.amount;

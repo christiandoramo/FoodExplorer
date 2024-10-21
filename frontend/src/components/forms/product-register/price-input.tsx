@@ -61,7 +61,6 @@ export const PriceInput: React.FC<FormValueTextProps> = ({
         type={"text"}
         placeholder={placeholder}
         ref={inputRef}
-        style={{ maxWidth: 251 }}
         name={name}
         value={price} // Controla o valor do input com o estado `price`
         onChange={handleValueChange} // Mantém a lógica de alteração do preço

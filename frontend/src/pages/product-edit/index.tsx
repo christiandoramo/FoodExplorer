@@ -4,8 +4,8 @@ import {
   EditNewDishButton,
   EditContainer,
   PageLabelContainer,
-  CancelSubmitButton,
   SubmitContainer,
+  DeleteButton,
 } from "./styles";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -172,10 +172,18 @@ export const ProductEdit: React.FC<any> = () => {
     }
     const editResponse = await productService.updateProduct(id, formData);
 
-    console.log(editResponse);
-
     if (editResponse) {
       if (editResponse.status === 200 || editResponse.status === 201) {
+        navigate("/");
+      }
+    }
+  };
+
+  const handleDelete = async () => {
+    const deleteResponse = await productService.deleteProduct(id);
+
+    if (deleteResponse) {
+      if (deleteResponse.status === 200 || deleteResponse.status === 201) {
         navigate("/");
       }
     }
@@ -263,12 +271,13 @@ export const ProductEdit: React.FC<any> = () => {
             >
               Editar prato
             </EditNewDishButton>
-            <CancelSubmitButton
+            <DeleteButton
               className="bg-dark-100 text-light-100"
-              onClick={() => navigate("/")}
+              onClick={handleDelete}
+              type="button"
             >
-              Cancelar
-            </CancelSubmitButton>
+              Excluir prato
+            </DeleteButton>
           </SubmitContainer>
         </EditContainer>
         <Footer />

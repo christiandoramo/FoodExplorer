@@ -296,8 +296,6 @@ export class ProductsRepository {
   }
 
   async deleteProduct(id: string) {
-    await db("item_products").where({ product_id: id }).delete();
-    await db("ingredients").where({ product_id: id }).delete();
     return await db("products").where({ id }).delete();
   }
 

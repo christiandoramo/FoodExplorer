@@ -86,6 +86,7 @@ export const EditNewDishButton = styled.button`
   width: 285px;
   height: 48px;
   border-radius: 5px;
+  padding: 12px;
   cursor: pointer;
   &:hover {
     background-color: black;
@@ -99,8 +100,8 @@ export const EditNewDishButton = styled.button`
   }
 `;
 
-export const CancelSubmitButton = styled.button`
-  width: 285px;
+export const DeleteButton = styled.button`
+  padding: 12px;
   height: 48px;
   border-radius: 5px;
   cursor: pointer;
@@ -125,7 +126,12 @@ export const IngredientContainer = styled.div`
 `;
 
 export const SubmitContainer = styled.div`
-  width: auto;
   display: flex;
   gap: 10px;
+  @media (max-width: 1024px) and (orientation: "landscape") {
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
