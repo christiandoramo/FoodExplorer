@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { InputContainer, StringInputElement } from "./styles";
+import { InputContainer, ValueInputElement } from "./styles";
 import { useMask } from "@react-input/mask";
 import { cleanPrice } from "../../../utils/strings";
 
@@ -55,7 +55,7 @@ export const PriceInput: React.FC<FormValueTextProps> = ({
       <label className="text-light-400 roboto small-regular" htmlFor={name}>
         {label}
       </label>
-      <StringInputElement
+      <ValueInputElement
         className={"text-light-100 small-regular bg-dark-900"}
         id={name}
         type={"text"}

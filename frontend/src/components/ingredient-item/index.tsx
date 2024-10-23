@@ -19,14 +19,26 @@ export const IngredientItem: React.FC<IngredientItemProps> = ({
 }) => {
   return (
     <Container isnew={isnew}>
-      <input type="text" value={value} readOnly={!isnew} {...rest} />
+      <input
+        className={!!isnew ? "text-light-500" : "text-light-100"}
+        type="text"
+        value={value}
+        readOnly={!isnew}
+        {...rest}
+      />
 
       <button
         type="button"
         onClick={onClick}
-        className={isnew ? "button-add" : "button-delete"}
+        className={
+          isnew ? "button-add text-light-500" : "button-delete text-light-100"
+        }
       >
-        {isnew ? <Plus size={16} /> : <X size={16} />}
+        {isnew ? (
+          <Plus className="text-light-500" size={16} />
+        ) : (
+          <X className="text-light-100" size={16} />
+        )}
       </button>
     </Container>
   );

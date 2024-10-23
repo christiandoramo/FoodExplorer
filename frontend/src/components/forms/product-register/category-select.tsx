@@ -51,12 +51,12 @@ export const CategorySelect: React.FC<SelectCategoriesProps> = ({
         name={name}
         value={selectedCategory}
       >
-        <option value="" disabled>
+        <option className="bg-dark-900" value="" disabled>
           {placeholder}
         </option>
         {categories.map((category) => (
           <option
-            className={"text-light-100 small-regular"}
+            className={"text-light-100 bg-dark-900 small-regular"}
             style={{ maxWidth: 463 }}
             key={category}
             value={category}

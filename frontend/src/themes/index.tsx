@@ -292,4 +292,5 @@ export const GlobalStyle = createGlobalStyle`
   .text-tints-cake-200 {
     color: rgba(130,243,255,1);
   }
+
 `;

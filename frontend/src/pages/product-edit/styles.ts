@@ -70,7 +70,7 @@ export const EditContainer = styled.div`
       display: none;
     }
     margin: 0;
-    padding: 25px 50px;
+    padding: 25px 25px;
     width: 100%;
     gap: 40px;
     border: none;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  width: 100dvw;
+  width: 100%;
   height: auto;
   min-height: 100dvh;
   display: flex;
@@ -41,7 +41,7 @@ export const CreateContainer = styled.div`
   border-radius: 16px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  // justify-content: space-between;
   h1 {
     text-align: center;
     padding: 0 32px;
@@ -70,7 +70,7 @@ export const CreateContainer = styled.div`
       display: none;
     }
     margin: 0;
-    padding: 25px 50px;
+    padding: 25px 25px;
     width: 100%;
     gap: 40px;
     border: none;

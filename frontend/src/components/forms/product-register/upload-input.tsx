@@ -16,7 +16,10 @@ export const UploadInput: React.FC<FormUploadProps> = ({
       <label className="text-light-400 roboto small-regular" htmlFor={name}>
         {label}
       </label>
-      <label className="text-light-400 roboto small-regular" htmlFor={name}>
+      <label
+        className="text-light-400 roboto small-regular upload-label"
+        htmlFor={name}
+      >
         <UploadInputContainer
           className={"text-light-100 small-regular bg-dark-900"}
         >
@@ -29,8 +32,10 @@ export const UploadInput: React.FC<FormUploadProps> = ({
             style={{ display: "none" }}
             onChange={onChange}
           />
-          <UploadSimple size={32} />
-          Inserir imagem
+          <div>
+            <UploadSimple size={30} />
+          </div>
+          <div>Inserir imagem</div>
         </UploadInputContainer>
       </label>
       {error && (
