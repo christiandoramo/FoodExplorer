@@ -1,5 +1,26 @@
 # Food Explorer
 
+## Screenshots
+
+![image1](images/img01.png)
+
+![image1](images/img02.png)
+
+![image1](images/img03.png)
+
+![image1](images/img04.png)
+
+![image1](images/img05.png)
+
+![image1](images/img06.png)
+
+![image1](images/img07.png)
+
+![image1](images/img08.png)
+
+![image1](images/img09.png)
+
+
 ## Instruções de como rodar:
 
 ### Front end

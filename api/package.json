@@ -52,5 +52,6 @@
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2"
-  }
+  },
+  "packageManager": "pnpm@10.5.2+sha1.ca68c0441df195b7e2992f1d1cb12fb731f82d78"
 }
