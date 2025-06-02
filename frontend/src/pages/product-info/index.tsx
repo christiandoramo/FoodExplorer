@@ -59,7 +59,9 @@ export const ProductInfo: React.FC<any> = () => {
         </ProductImage>
         <ProductInfoContainer>
           <h2 className="text-light-300 medium-500">{product?.name}</h2>
-          <h3 className="text-light-300 300-regular">{product?.description}</h3>
+          <p
+          className="text-light-300 300-regular">{product?.description}
+          </p>
           <div className="ingredient-container">
             {product?.ingredients.map((ing, index) =>
               index === product?.ingredients.length - 1 ? (
@@ -87,6 +89,7 @@ export const ProductInfo: React.FC<any> = () => {
             </div>
           )}
           {user?.role === USER_ROLES.DEFAULT && (
+            
             <div className="include-container">
               <Minus
                 className="text-light-300"

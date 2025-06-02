@@ -99,10 +99,15 @@ export const ProductInfoContainer = styled.div`
   width: 100%;
   height: auto;
   gap: 56px;
-  h1 {
-  }
+
   p {
+    max-width: 100%;           // Garante que o texto não ultrapasse a largura do contêiner
+    word-wrap: break-word;     // Quebra palavras longas
+    overflow-wrap: break-word; // Suporte adicional para quebra
+    white-space: normal;       // Permite quebra de linha automática
   }
+
+  
 
   @media (max-width: 768px) {
     justify-content: center;

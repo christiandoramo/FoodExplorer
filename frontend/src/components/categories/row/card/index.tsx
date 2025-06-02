@@ -47,6 +47,7 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
   return (
     <Container className={"bg-dark-200 text-light-100"}>
       <Thumbnail
+      onClick={onCardClick}
         src={`${import.meta.env.VITE_BACKEND_NODE_HOST}/uploads/${
           product?.avatar
         }`}
@@ -78,10 +79,12 @@ export const Card: React.FC<CardProps> = ({ product, user }) => {
       >
         {product.name + " >"}
       </div>
-      <div className="description-container smallest-regular text-light-400">
+      <div 
+      className="description-container smallest-regular text-light-400">
         {product.description}
       </div>
-      <div className="price-container biggest-regular text-tints-cake-200">
+      <div 
+      className="price-container biggest-regular text-tints-cake-200">
         {formatToBRL((product.price * toInclude).toString())}
       </div>
       {user?.role === USER_ROLES.DEFAULT && (
